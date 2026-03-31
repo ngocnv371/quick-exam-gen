@@ -1,13 +1,8 @@
-import { DeployButton } from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
-import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-steps";
-import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
-import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -16,42 +11,28 @@ export default function Home() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
+              <Link href="/">Quick Exam Gen</Link>
+              <Link href="/projects" className="text-foreground/70 hover:text-foreground">
+                Projects
+              </Link>
             </div>
-            {!hasEnvVars ? (
-              <EnvVarWarning />
-            ) : (
+            <div className="flex items-center gap-3">
+              <ThemeSwitcher />
               <Suspense>
                 <AuthButton />
               </Suspense>
-            )}
+            </div>
           </div>
         </nav>
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
-          <Hero />
-          <main className="flex-1 flex flex-col gap-6 px-4">
-            <h2 className="font-medium text-xl mb-4">Next steps</h2>
-            {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-          </main>
-        </div>
-
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>
-            Powered by{" "}
-            <a
-              href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-              target="_blank"
-              className="font-bold hover:underline"
-              rel="noreferrer"
-            >
-              Supabase
-            </a>
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 max-w-5xl p-5">
+          <h1 className="text-4xl font-bold">Quick Exam Gen</h1>
+          <p className="text-foreground/70 text-center max-w-md">
+            Create and manage your exam projects with ease.
           </p>
-          <ThemeSwitcher />
-        </footer>
+          <Button asChild size="lg">
+            <Link href="/projects/new">Create New Project</Link>
+          </Button>
+        </div>
       </div>
     </main>
   );
