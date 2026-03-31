@@ -3,20 +3,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
-import type { VariantProps } from "class-variance-authority";
-import { badgeVariants } from "@/components/ui/badge";
-import { ProjectTitleEditor, DeleteProjectButton } from "./_components/project-actions";
-
-type ProjectStatus = "draft" | "extracting" | "ready" | "generating" | "done";
-type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
-
-const STATUS_BADGE: Record<ProjectStatus, BadgeVariant> = {
-  draft: "secondary",
-  extracting: "outline",
-  ready: "default",
-  generating: "outline",
-  done: "default",
-};
+import { ProjectTitleEditor, DeleteProjectButton, ProjectStatusEditor, ProjectDescriptionEditor } from "./_components/project-actions";
+import { STATUS_BADGE, type ProjectStatus } from "@/app/projects/_lib/constants";
 
 async function ProjectDetail({ id }: { id: string }) {
   const supabase = await createClient();
@@ -41,8 +29,9 @@ async function ProjectDetail({ id }: { id: string }) {
       {/* Title + status */}
       <div className="flex flex-col gap-2">
         <ProjectTitleEditor id={project.id} initialTitle={project.title} />
-        <div className="flex items-center gap-3">
-          <Badge variant={STATUS_BADGE[status]}>{status}</Badge>
+        <div className="flex items-center gap-3 flex-wrap">
+          <ProjectStatusEditor id={project.id} initialStatus={status} />
+          <Badge variant={STATUS_BADGE[status] ?? "secondary"}>{status}</Badge>
           <span className="text-xs text-foreground/50">
             Updated {new Date(project.updated_at).toLocaleString()}
           </span>
@@ -51,6 +40,12 @@ async function ProjectDetail({ id }: { id: string }) {
           </span>
         </div>
       </div>
+
+      {/* Description */}
+      <ProjectDescriptionEditor
+        id={project.id}
+        initialMetadata={project.metadata as Record<string, unknown> | null}
+      />
 
       {/* Placeholder content area */}
       <div className="border rounded-lg p-6 text-foreground/50 text-sm min-h-40 flex items-center justify-center">

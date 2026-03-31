@@ -2,25 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { VariantProps } from "class-variance-authority";
-import { badgeVariants } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
 import { ProjectsFilter } from "./_components/projects-filter";
 import { Suspense } from "react";
+import { VALID_STATUSES, STATUS_BADGE, type ProjectStatus } from "./_lib/constants";
 
 const PAGE_SIZE = 10;
-
-const VALID_STATUSES = ["draft", "extracting", "ready", "generating", "done"] as const;
-type ProjectStatus = (typeof VALID_STATUSES)[number];
-type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
-
-const STATUS_BADGE: Record<ProjectStatus, BadgeVariant> = {
-  draft: "secondary",
-  extracting: "outline",
-  ready: "default",
-  generating: "outline",
-  done: "default",
-};
 
 function buildUrl(params: Record<string, string | undefined>) {
   const p = new URLSearchParams();
@@ -91,7 +78,7 @@ async function ProjectsList({
             >
               <span className="font-medium truncate">{project.title}</span>
               <div className="flex items-center gap-3 shrink-0 ml-4">
-                <Badge variant={STATUS_BADGE[project.status as ProjectStatus]}>
+                <Badge variant={STATUS_BADGE[project.status as ProjectStatus] ?? "secondary"}>
                   {project.status}
                 </Badge>
                 <span className="text-xs text-foreground/50">
@@ -138,7 +125,7 @@ export default function ProjectsPage({
         </Button>
       </div>
 
-      <Suspense>
+      <Suspense fallback={null}>
         <ProjectsFilterWrapper searchParams={searchParams} />
       </Suspense>
 

@@ -8,15 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const STATUS_OPTIONS = [
-  { value: "all", label: "All statuses" },
-  { value: "draft", label: "Draft" },
-  { value: "extracting", label: "Extracting" },
-  { value: "ready", label: "Ready" },
-  { value: "generating", label: "Generating" },
-  { value: "done", label: "Done" },
-];
+import { STATUS_OPTIONS } from "@/app/projects/_lib/constants";
 
 export function ProjectsFilter({ currentStatus }: { currentStatus: string }) {
   const router = useRouter();
@@ -31,7 +23,8 @@ export function ProjectsFilter({ currentStatus }: { currentStatus: string }) {
       params.set("status", value);
     }
     params.delete("page");
-    router.push(`${pathname}?${params.toString()}`);
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
   }
 
   return (
