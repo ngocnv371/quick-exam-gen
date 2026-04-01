@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { ProjectTitleEditor, DeleteProjectButton, ProjectStatusEditor, ProjectDescriptionEditor } from "./_components/project-actions";
+import { FilePreviewExtractor } from "./_components/file-preview-extractor";
 import { STATUS_BADGE, type ProjectStatus } from "@/app/projects/_lib/constants";
 
 async function ProjectDetail({ id }: { id: string }) {
@@ -47,10 +48,7 @@ async function ProjectDetail({ id }: { id: string }) {
         initialMetadata={project.metadata as Record<string, unknown> | null}
       />
 
-      {/* Placeholder content area */}
-      <div className="border border-border/50 rounded-xl p-6 text-foreground/40 text-sm min-h-40 flex items-center justify-center bg-muted/30 backdrop-blur-sm">
-        Project content will go here.
-      </div>
+      <FilePreviewExtractor />
 
       {/* Danger zone */}
       <div className="flex justify-end pt-4 border-t">
