@@ -48,7 +48,10 @@ async function ProjectDetail({ id }: { id: string }) {
         initialMetadata={project.metadata as Record<string, unknown> | null}
       />
 
-      <FilePreviewExtractor />
+      <FilePreviewExtractor
+        projectId={project.id}
+        initialMetadata={project.metadata as Record<string, unknown> | null}
+      />
 
       {/* Danger zone */}
       <div className="flex justify-end pt-4 border-t">

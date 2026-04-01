@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,9 +45,11 @@ export function ProjectTitleEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
+      toast.error("Could not save title", { description: dbError.message });
       return;
     }
     setEditing(false);
+    toast.success("Title saved");
     router.refresh();
   }
 
@@ -121,8 +124,10 @@ export function ProjectStatusEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
+      toast.error("Could not save status", { description: dbError.message });
       return;
     }
+    toast.success("Status saved");
     router.refresh();
   }
 
@@ -171,9 +176,11 @@ export function ProjectDescriptionEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
+      toast.error("Could not save description", { description: dbError.message });
       return;
     }
     setSaved(true);
+    toast.success("Description saved");
     router.refresh();
     setTimeout(() => setSaved(false), 2000);
   }
