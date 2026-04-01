@@ -56,6 +56,7 @@ async function ProjectsList({
     .from("projects")
     .select("id, title, status, created_at, updated_at", { count: "exact" })
     .order("updated_at", { ascending: false })
+    .eq('type', 'exam')
     .range(from, to);
 
   if (status) query = query.eq("status", status);

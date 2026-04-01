@@ -48,8 +48,10 @@ create table public.projects (
   id          uuid        primary key default gen_random_uuid(),
   user_id     uuid        not null references auth.users(id) on delete cascade,
   title       text        not null,
+  type        text        not null default 'exam',
+  tags        TEXT[]      default '{}',
   status      text        not null default 'draft'
-                check (status in ('draft', 'extracting', 'ready', 'generating', 'done')),
+                check (status in ('draft', 'pending', 'ready', 'processing', 'failed', 'done', 'archived')),
   metadata    jsonb,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
