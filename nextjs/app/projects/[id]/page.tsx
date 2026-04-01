@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { ProjectTitleEditor, DeleteProjectButton, ProjectStatusEditor, ProjectDescriptionEditor } from "./_components/project-actions";
 import { FilePreviewExtractor } from "./_components/file-preview-extractor";
+import { ExamVariantsGenerator } from "./_components/exam-variants-generator";
 import { STATUS_BADGE, type ProjectStatus } from "@/app/projects/_lib/constants";
 
 async function ProjectDetail({ id }: { id: string }) {
@@ -49,6 +50,11 @@ async function ProjectDetail({ id }: { id: string }) {
       />
 
       <FilePreviewExtractor
+        projectId={project.id}
+        initialMetadata={project.metadata as Record<string, unknown> | null}
+      />
+
+      <ExamVariantsGenerator
         projectId={project.id}
         initialMetadata={project.metadata as Record<string, unknown> | null}
       />
