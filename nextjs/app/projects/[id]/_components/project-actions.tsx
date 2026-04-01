@@ -53,7 +53,7 @@ export function ProjectTitleEditor({
   if (!editing) {
     return (
       <button
-        className="text-2xl font-bold text-left hover:underline decoration-dotted"
+          className="text-2xl font-bold text-left hover:text-foreground/70 transition-colors"
         onClick={() => setEditing(true)}
       >
         {title}

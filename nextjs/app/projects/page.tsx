@@ -69,19 +69,19 @@ async function ProjectsList({
       {!projects || projects.length === 0 ? (
         <p className="text-foreground/60 text-sm">No projects found.</p>
       ) : (
-        <div className="flex flex-col divide-y border rounded-lg overflow-hidden">
+        <div className="flex flex-col divide-y divide-border/40 border border-border/50 rounded-lg overflow-hidden bg-card/50 backdrop-blur-sm">
           {projects.map((project) => (
             <Link
               key={project.id}
               href={`/projects/${project.id}`}
-              className="flex items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors"
+              className="group flex items-center justify-between px-4 py-3.5 hover:bg-primary/5 hover:border-l-2 hover:border-l-primary transition-all duration-150"
             >
-              <span className="font-medium truncate">{project.title}</span>
+              <span className="font-medium truncate group-hover:text-primary transition-colors">{project.title}</span>
               <div className="flex items-center gap-3 shrink-0 ml-4">
                 <Badge variant={STATUS_BADGE[project.status as ProjectStatus] ?? "secondary"}>
                   {project.status}
                 </Badge>
-                <span className="text-xs text-foreground/50">
+                <span className="text-xs text-foreground/40 tabular-nums">
                   {new Date(project.updated_at).toLocaleDateString()}
                 </span>
               </div>
@@ -121,7 +121,7 @@ export default function ProjectsPage({
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Projects</h1>
         <Button asChild>
-          <Link href="/projects/new">Create New Project</Link>
+          <Link href="/projects/new">New Project</Link>
         </Button>
       </div>
 

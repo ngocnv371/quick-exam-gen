@@ -48,7 +48,7 @@ async function ProjectDetail({ id }: { id: string }) {
       />
 
       {/* Placeholder content area */}
-      <div className="border rounded-lg p-6 text-foreground/50 text-sm min-h-40 flex items-center justify-center">
+      <div className="border border-border/50 rounded-xl p-6 text-foreground/40 text-sm min-h-40 flex items-center justify-center bg-muted/30 backdrop-blur-sm">
         Project content will go here.
       </div>
 
@@ -68,12 +68,12 @@ export default function ProjectPage({
   return (
     <div className="flex flex-col gap-6 p-8 max-w-5xl mx-auto w-full">
       {/* Breadcrumb */}
-      <nav className="text-sm text-foreground/60">
-        <Link href="/projects" className="hover:underline">
+      <nav className="text-sm text-foreground/50 flex items-center gap-2">
+        <Link href="/projects" className="hover:text-foreground transition-colors">
           Projects
         </Link>
-        <span className="mx-2">/</span>
-        <span>Detail</span>
+        <span className="text-foreground/30">/</span>
+        <span className="text-foreground/40">Detail</span>
       </nav>
 
       <Suspense fallback={<div className="text-sm text-foreground/50">Loading…</div>}>
