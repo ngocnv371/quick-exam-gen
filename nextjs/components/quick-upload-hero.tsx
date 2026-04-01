@@ -21,13 +21,16 @@ export function QuickUploadHero() {
 
       try {
         const supabase = createClient();
-        const {
+        let {
           data: { user },
         } = await supabase.auth.getUser();
 
         if (!user) {
-          router.push("/auth/login");
-          return;
+          const { data: anonData, error: anonError } = await supabase.auth.signInAnonymously();
+          if (anonError || !anonData.user) {
+            throw new Error("Could not start a session. Please try again.");
+          }
+          user = anonData.user;
         }
 
         const title = file.name.replace(/\.[^/.]+$/, "").trim() || "Untitled Project";

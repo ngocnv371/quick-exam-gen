@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 import type { ExamVariant } from "@/lib/gemini";
 import { GenerationConfig } from "./generation-config";
 import { ExamVariantsDisplay } from "./exam-variants-display";
@@ -58,7 +61,17 @@ export function ExamVariantsGenerator({
   const [showAnswers, setShowAnswers] = useState(false);
   const [showExplanations, setShowExplanations] = useState(false);
 
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
   async function handleGenerate() {
+    // Check if user is anonymous — prompt to log in before generating
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || user.is_anonymous) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const res = await fetch(`/api/projects/${projectId}/generate-variants`, {
@@ -91,7 +104,30 @@ export function ExamVariantsGenerator({
   );
 
   return (
-    <Card className="border-border/60">
+    <>
+      <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign in to generate variants</DialogTitle>
+            <DialogDescription>
+              Create a free account (or sign in) to generate exam variants and save your work permanently.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
+            <Button variant="outline" onClick={() => setShowLoginPrompt(false)}>
+              Cancel
+            </Button>
+            <Button variant="outline" asChild>
+              <a href={`/auth/login?next=${encodeURIComponent(`/projects/${projectId}`)}`}>Sign in</a>
+            </Button>
+            <Button asChild>
+              <a href={`/auth/sign-up?next=${encodeURIComponent(`/projects/${projectId}`)}`}>Create account</a>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Card className="border-border/60">
       <CardHeader className="pb-4">
         <CardTitle className="text-base flex items-center gap-2">
           <Sparkles className="h-4 w-4" />
@@ -128,5 +164,6 @@ export function ExamVariantsGenerator({
         )}
       </CardContent>
     </Card>
+    </>
   );
 }
