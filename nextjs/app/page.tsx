@@ -1,5 +1,6 @@
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { QuickUploadHero } from "@/components/quick-upload-hero";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
@@ -46,12 +47,13 @@ export default function Home() {
           <p className="text-foreground/50 text-base max-w-md leading-relaxed">
             Create and manage your exam projects with ease.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Button asChild size="lg">
-              <Link href="/projects/new">Create New Project</Link>
+          <QuickUploadHero />
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button asChild size="sm" variant="ghost" className="text-foreground/50">
+              <Link href="/projects/new">Create project manually</Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/projects">View Projects</Link>
+            <Button asChild size="sm" variant="ghost" className="text-foreground/50">
+              <Link href="/projects">View projects</Link>
             </Button>
           </div>
         </div>
