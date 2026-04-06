@@ -1,4 +1,5 @@
 import { AuthButton } from "@/components/auth-button";
+import { CoinsBadge } from "@/components/coins-badge";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -42,8 +43,17 @@ export default function ProjectsLayout({
             >
               Projects
             </Link>
+            <Link
+              href="/projects/billing"
+              className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
+            >
+              Billing
+            </Link>
           </div>
           <div className="flex items-center gap-3">
+            <Suspense>
+              <CoinsBadge />
+            </Suspense>
             <ThemeSwitcher />
             <Suspense>
               <AuthButton />

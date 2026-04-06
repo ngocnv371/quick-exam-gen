@@ -83,13 +83,49 @@ create trigger trg_new_user_init_balance
   for each row execute function public.init_balance();
 
 -- ============================================================
--- 4. Indexes
+-- 4. coin_packages  (product catalogue)
+-- ============================================================
+create table public.coin_packages (
+  id          text        primary key,              -- e.g. 'starter', 'pro'
+  label       text        not null,
+  coins       integer     not null check (coins > 0),
+  price_cents integer     not null check (price_cents > 0),  -- e.g. 199
+  currency    text        not null default 'USD',
+  active      boolean     not null default true,
+  sort_order  integer     not null default 0,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+create trigger trg_coin_packages_updated_at
+  before update on public.coin_packages
+  for each row execute function public.set_updated_at();
+
+alter table public.coin_packages enable row level security;
+
+-- Anyone (including anonymous) can read active packages
+create policy "coin_packages: public read"
+  on public.coin_packages for select
+  using (active = true);
+
+-- Seed the initial packages
+insert into public.coin_packages (id, label, coins, price_cents, sort_order) values
+  ('starter',   'Starter',   10,  199,  1),
+  ('standard',  'Standard',  50,  799,  2),
+  ('pro',       'Pro',       120, 1699, 3),
+  ('unlimited', 'Unlimited', 300, 3499, 4);
+
+-- ============================================================
+-- 5. Indexes
 -- ============================================================
 create index idx_coins_transactions_user_created
   on public.coins_transactions (user_id, created_at desc);
 
 -- ============================================================
--- 5. Grants for authenticated role
+-- 6. Grants for authenticated role
 -- ============================================================
 grant select on public.coins_transactions to authenticated;
 grant select on public.coins_balance      to authenticated;
+grant select on public.coin_packages      to authenticated;
+-- Allow anonymous users to browse packages
+grant select on public.coin_packages      to anon;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -62,6 +62,16 @@ export function ExamVariantsGenerator({
   const [showExplanations, setShowExplanations] = useState(false);
 
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/billing/balance")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d: { balance: number } | null) => {
+        if (d !== null) setBalance(d.balance);
+      })
+      .catch(() => {/* ignore — UI degrades gracefully */});
+  }, []);
 
   async function handleGenerate() {
     const supabase = createClient();
@@ -84,9 +94,10 @@ export function ExamVariantsGenerator({
         throw new Error(data.error ?? "Generation failed");
       }
 
-      const data = (await res.json()) as { variants: ExamVariant[] };
+      const data = (await res.json()) as { variants: ExamVariant[]; newBalance?: number };
       setVariants(data.variants);
       setActiveTab(data.variants[0]?.title ?? "");
+      if (typeof data.newBalance === "number") setBalance(data.newBalance);
       toast.success(`${data.variants.length} exam variants generated`);
       router.refresh();
     } catch (err) {
@@ -145,6 +156,7 @@ export function ExamVariantsGenerator({
           setVariantCount={setVariantCount}
           isGenerating={isGenerating}
           hasExtractedContent={hasExtractedContent}
+          balance={balance}
           onGenerate={handleGenerate}
         />
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateExamVariants, type ExamVariant } from "@/lib/gemini";
+import { getCoinsBalance, getGenerationCost, deductCoins } from "@/lib/billing";
 
 const VALID_VARIANT_COUNTS = [2, 4, 6] as const;
 type VariantCount = (typeof VALID_VARIANT_COUNTS)[number];
@@ -44,6 +45,16 @@ export async function POST(
     return NextResponse.json(
       { error: "variantCount must be 2, 4, or 6" },
       { status: 400 },
+    );
+  }
+
+  // Check coin balance before doing any work
+  const cost = getGenerationCost(parsedCount);
+  const balance = await getCoinsBalance(supabase);
+  if (balance < cost) {
+    return NextResponse.json(
+      { error: `Insufficient coins. This generation costs ${cost} coin(s) but your balance is ${balance}.` },
+      { status: 402 },
     );
   }
 
@@ -107,5 +118,18 @@ export async function POST(
     return NextResponse.json({ error: updateError.message }, { status: 500 });
   }
 
-  return NextResponse.json({ variants });
+  // Deduct coins after successful generation + persist
+  try {
+    await deductCoins(
+      user.id,
+      cost,
+      project.id,
+      `Generated ${parsedCount} exam variant(s)`,
+    );
+  } catch (err) {
+    // Coin deduction failed — log but don't fail the request since content was saved
+    console.error("Coin deduction failed:", err);
+  }
+
+  return NextResponse.json({ variants, newBalance: balance - cost });
 }

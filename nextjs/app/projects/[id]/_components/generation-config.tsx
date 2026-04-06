@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { COIN_COST_PER_VARIANT } from "@/lib/billing";
 
 const VARIANT_COUNT_OPTIONS = [2, 4, 6] as const;
 
@@ -30,6 +31,7 @@ interface GenerationConfigProps {
   setVariantCount: (v: 2 | 4 | 6) => void;
   isGenerating: boolean;
   hasExtractedContent: boolean;
+  balance: number | null;
   onGenerate: () => void;
 }
 
@@ -40,8 +42,12 @@ export function GenerationConfig({
   setVariantCount,
   isGenerating,
   hasExtractedContent,
+  balance,
   onGenerate,
 }: GenerationConfigProps) {
+  const cost = variantCount * COIN_COST_PER_VARIANT;
+  const hasEnoughCoins = balance === null || balance >= cost;
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -78,6 +84,53 @@ export function GenerationConfig({
             <SelectContent>
               {VARIANT_COUNT_OPTIONS.map((n) => (
                 <SelectItem key={n} value={String(n)}>
+                  {n} variants
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {!hasExtractedContent && (
+        <p className="text-sm text-amber-600 dark:text-amber-400">
+          No extracted content yet. Upload and extract a file above before generating.
+        </p>
+      )}
+
+      {!hasEnoughCoins && (
+        <p className="text-sm text-destructive">
+          Insufficient coins. You need {cost} coin(s) but have {balance ?? 0}.
+        </p>
+      )}
+
+      <div className="flex items-center gap-3 flex-wrap">
+        <Button
+          onClick={onGenerate}
+          disabled={isGenerating || !hasExtractedContent || !hasEnoughCoins}
+          className="w-full sm:w-auto"
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Generating…
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4" />
+              Generate variants
+            </>
+          )}
+        </Button>
+        <span className="flex items-center gap-1 text-xs text-foreground/50">
+          <Coins className="h-3.5 w-3.5" />
+          Costs {cost} coin{cost !== 1 ? "s" : ""}
+        </span>
+      </div>
+    </div>
+  );
+}
+
                   {n} variants
                 </SelectItem>
               ))}
