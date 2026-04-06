@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { COIN_COST_PER_VARIANT } from "@/lib/billing";
+import { getGenerationCost, getCoinsPerVariant, CONTENT_TIERS } from "@/lib/billing";
 
 const VARIANT_COUNT_OPTIONS = [2, 4, 6] as const;
 
@@ -32,6 +32,7 @@ interface GenerationConfigProps {
   isGenerating: boolean;
   hasExtractedContent: boolean;
   balance: number | null;
+  contentLength: number;
   onGenerate: () => void;
 }
 
@@ -43,9 +44,12 @@ export function GenerationConfig({
   isGenerating,
   hasExtractedContent,
   balance,
+  contentLength,
   onGenerate,
 }: GenerationConfigProps) {
-  const cost = variantCount * COIN_COST_PER_VARIANT;
+  const coinsPerVariant = getCoinsPerVariant(contentLength);
+  const cost = getGenerationCost(variantCount, contentLength);
+  const tier = CONTENT_TIERS.find((t) => contentLength <= t.maxChars) ?? CONTENT_TIERS[CONTENT_TIERS.length - 1];
   const hasEnoughCoins = balance === null || balance >= cost;
 
   return (
@@ -125,43 +129,13 @@ export function GenerationConfig({
         <span className="flex items-center gap-1 text-xs text-foreground/50">
           <Coins className="h-3.5 w-3.5" />
           Costs {cost} coin{cost !== 1 ? "s" : ""}
+          {contentLength > 0 && (
+            <span className="text-foreground/40">
+              &nbsp;&middot;&nbsp;{coinsPerVariant}/variant ({tier.label})
+            </span>
+          )}
         </span>
       </div>
-    </div>
-  );
-}
-
-                  {n} variants
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {!hasExtractedContent && (
-        <p className="text-sm text-amber-600 dark:text-amber-400">
-          No extracted content yet. Upload and extract a file above before generating.
-        </p>
-      )}
-
-      <Button
-        onClick={onGenerate}
-        disabled={isGenerating || !hasExtractedContent}
-        className="w-full sm:w-auto"
-      >
-        {isGenerating ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Generating…
-          </>
-        ) : (
-          <>
-            <Sparkles className="h-4 w-4" />
-            Generate variants
-          </>
-        )}
-      </Button>
     </div>
   );
 }

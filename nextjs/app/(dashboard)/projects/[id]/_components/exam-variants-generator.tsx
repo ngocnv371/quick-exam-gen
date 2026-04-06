@@ -108,10 +108,15 @@ export function ExamVariantsGenerator({
     }
   }
 
-  const hasExtractedContent = !!(
-    (initialMetadata?.sourceFile as Record<string, unknown> | undefined)?.extractedText ??
-    initialMetadata?.extractedText
-  );
+  const extractedContent =
+    typeof (initialMetadata?.sourceFile as Record<string, unknown> | undefined)?.extractedText === "string"
+      ? ((initialMetadata!.sourceFile as Record<string, unknown>).extractedText as string)
+      : typeof initialMetadata?.extractedText === "string"
+        ? (initialMetadata.extractedText as string)
+        : "";
+
+  const hasExtractedContent = extractedContent.length > 0;
+  const contentLength = extractedContent.length;
 
   return (
     <>
@@ -157,6 +162,7 @@ export function ExamVariantsGenerator({
           isGenerating={isGenerating}
           hasExtractedContent={hasExtractedContent}
           balance={balance}
+          contentLength={contentLength}
           onGenerate={handleGenerate}
         />
 

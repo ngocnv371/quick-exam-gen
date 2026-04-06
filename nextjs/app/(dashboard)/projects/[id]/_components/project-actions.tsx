@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { VALID_STATUSES, type ProjectStatus } from "@/app/projects/_lib/constants";
+import { ProjectStatus, VALID_STATUSES } from "../../_lib/constants";
 
 export function ProjectTitleEditor({
   id,

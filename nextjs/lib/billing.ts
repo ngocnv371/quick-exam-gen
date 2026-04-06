@@ -1,11 +1,29 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminClient } from "./supabase/admin";
 
-/** Coins charged per variant generated (e.g. 4 variants = 4 coins). */
-export const COIN_COST_PER_VARIANT = 1;
+/**
+ * Tiered pricing based on extracted content length.
+ * Short docs cost 1 coin/variant; longer docs cost proportionally more.
+ */
+export const CONTENT_TIERS = [
+  { maxChars: 15_000, coinsPerVariant: 1, label: "Short" },
+  { maxChars: 35_000, coinsPerVariant: 2, label: "Medium" },
+  { maxChars: 60_000, coinsPerVariant: 3, label: "Long" },
+] as const;
 
-export function getGenerationCost(variantCount: number): number {
-  return variantCount * COIN_COST_PER_VARIANT;
+export type ContentTier = (typeof CONTENT_TIERS)[number];
+
+/** Returns the coins-per-variant for the given content length. */
+export function getCoinsPerVariant(contentLength: number): number {
+  for (const tier of CONTENT_TIERS) {
+    if (contentLength <= tier.maxChars) return tier.coinsPerVariant;
+  }
+  return CONTENT_TIERS[CONTENT_TIERS.length - 1].coinsPerVariant;
+}
+
+/** Total coin cost for a generation job. */
+export function getGenerationCost(variantCount: number, contentLength: number): number {
+  return variantCount * getCoinsPerVariant(contentLength);
 }
 
 /** Fetch the current user's coin balance. Returns 0 if no row exists yet. */

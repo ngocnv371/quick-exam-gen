@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateExamVariants, type ExamVariant } from "@/lib/gemini";
-import { getCoinsBalance, getGenerationCost, deductCoins, creditCoins } from "@/lib/billing";
+import { getCoinsBalance, getGenerationCost, deductCoins, creditCoins, CONTENT_TIERS } from "@/lib/billing";
 
 const VALID_VARIANT_COUNTS = [2, 4, 6] as const;
 type VariantCount = (typeof VALID_VARIANT_COUNTS)[number];
@@ -48,17 +48,7 @@ export async function POST(
     );
   }
 
-  // Check coin balance before doing any work
-  const cost = getGenerationCost(parsedCount);
-  const balance = await getCoinsBalance(supabase);
-  if (balance < cost) {
-    return NextResponse.json(
-      { error: `Insufficient coins. This generation costs ${cost} coin(s) but your balance is ${balance}.` },
-      { status: 402 },
-    );
-  }
-
-  // Fetch the project (ownership check + get metadata)
+  // Fetch the project (ownership check + extract content needed for cost calculation)
   const { data: project, error: fetchError } = await supabase
     .from("projects")
     .select("id, metadata")
@@ -82,6 +72,26 @@ export async function POST(
     return NextResponse.json(
       { error: "No extracted content found. Upload and extract a file first." },
       { status: 422 },
+    );
+  }
+
+  const maxContentChars = CONTENT_TIERS[CONTENT_TIERS.length - 1].maxChars;
+  if (extractedText.length > maxContentChars) {
+    return NextResponse.json(
+      {
+        error: `Extracted content is too large (${extractedText.length.toLocaleString()} characters). Please reduce the document to under ${maxContentChars.toLocaleString()} characters before generating variants.`,
+      },
+      { status: 422 },
+    );
+  }
+
+  // Cost depends on content length — compute after we have the text.
+  const cost = getGenerationCost(parsedCount, extractedText.length);
+  const balance = await getCoinsBalance(supabase);
+  if (balance < cost) {
+    return NextResponse.json(
+      { error: `Insufficient coins. This generation costs ${cost} coin(s) but your balance is ${balance}.` },
+      { status: 402 },
     );
   }
 

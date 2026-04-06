@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProjectTitleEditor, DeleteProjectButton, ProjectStatusEditor, ProjectDescriptionEditor } from "./_components/project-actions";
 import { FilePreviewExtractor } from "./_components/file-preview-extractor";
 import { ExamVariantsGenerator } from "./_components/exam-variants-generator";
-import { STATUS_BADGE, type ProjectStatus } from "@/app/projects/_lib/constants";
+import { ProjectStatus, STATUS_BADGE } from "../_lib/constants";
 
 async function ProjectDetail({ id }: { id: string }) {
   const supabase = await createClient();
