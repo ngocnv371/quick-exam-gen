@@ -14,8 +14,6 @@ async function ProjectDetail({ id }: { id: string }) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  // Allow anonymous users through — they created the project and should be able to view it.
-  // The generate-variants flow will prompt them to sign in at that point.
   if (!user) redirect("/auth/login");
 
   const { data: project } = await supabase

@@ -64,10 +64,9 @@ export function ExamVariantsGenerator({
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   async function handleGenerate() {
-    // Check if user is anonymous — prompt to log in before generating
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.is_anonymous) {
+    if (!user) {
       setShowLoginPrompt(true);
       return;
     }
@@ -118,10 +117,10 @@ export function ExamVariantsGenerator({
               Cancel
             </Button>
             <Button variant="outline" asChild>
-              <a href={`/auth/login?next=${encodeURIComponent(`/projects/${projectId}`)}`}>Sign in</a>
+              <a href={`/auth/login`}>Sign in</a>
             </Button>
             <Button asChild>
-              <a href={`/auth/sign-up?next=${encodeURIComponent(`/projects/${projectId}`)}`}>Create account</a>
+              <a href={`/auth/sign-up`}>Create account</a>
             </Button>
           </DialogFooter>
         </DialogContent>
