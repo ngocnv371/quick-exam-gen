@@ -30,7 +30,7 @@ export async function PATCH(
     if (action === "approve") {
       await fulfillOrder(id);
     } else {
-      await failOrder(id, "failed");
+      await failOrder(id, "cancelled");
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Operation failed";
