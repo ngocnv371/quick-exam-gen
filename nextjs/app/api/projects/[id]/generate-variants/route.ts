@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { generateExamVariants, type ExamVariant } from "@/lib/gemini";
-import { getCoinsBalance, getGenerationCost, deductCoins } from "@/lib/billing";
+import { getCoinsBalance, getGenerationCost, deductCoins, creditCoins } from "@/lib/billing";
 
 const VALID_VARIANT_COUNTS = [2, 4, 6] as const;
 type VariantCount = (typeof VALID_VARIANT_COUNTS)[number];
@@ -85,7 +85,21 @@ export async function POST(
     );
   }
 
-  // Generate variants via Gemini
+  // Deduct coins upfront — reserve the cost before the expensive Gemini call.
+  // Any subsequent failure re-credits the coins as a refund.
+  try {
+    await deductCoins(
+      user.id,
+      cost,
+      project.id,
+      `Generated ${parsedCount} exam variant(s)`,
+    );
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Coin deduction failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+
+  // Generate variants via Gemini — re-credit on failure
   let variants: ExamVariant[];
   try {
     variants = await generateExamVariants({
@@ -94,11 +108,12 @@ export async function POST(
       variantCount: parsedCount,
     });
   } catch (err) {
+    await creditCoins(user.id, cost, `Refund: generation failed for project ${project.id}`).catch(console.error);
     const message = err instanceof Error ? err.message : "Generation failed";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
-  // Persist variants in metadata
+  // Persist variants in metadata — re-credit on failure
   const updatedMetadata: Record<string, unknown> = {
     ...metadata,
     examVariants: {
@@ -115,21 +130,10 @@ export async function POST(
     .eq("id", id);
 
   if (updateError) {
+    await creditCoins(user.id, cost, `Refund: save failed for project ${project.id}`).catch(console.error);
     return NextResponse.json({ error: updateError.message }, { status: 500 });
   }
 
-  // Deduct coins after successful generation + persist
-  try {
-    await deductCoins(
-      user.id,
-      cost,
-      project.id,
-      `Generated ${parsedCount} exam variant(s)`,
-    );
-  } catch (err) {
-    // Coin deduction failed — log but don't fail the request since content was saved
-    console.error("Coin deduction failed:", err);
-  }
-
-  return NextResponse.json({ variants, newBalance: balance - cost });
+  const newBalance = await getCoinsBalance(supabase);
+  return NextResponse.json({ variants, newBalance });
 }

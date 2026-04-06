@@ -28,7 +28,7 @@ create policy "coins_transactions: owner select"
 -- ============================================================
 create table public.coins_balance (
   user_id     uuid        primary key references auth.users(id) on delete cascade,
-  balance     integer     not null default 0,
+  balance     integer     not null default 0 check (balance >= 0),
   updated_at  timestamptz not null default now()
 );
 

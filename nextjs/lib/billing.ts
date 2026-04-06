@@ -120,7 +120,7 @@ export async function fulfillOrder(
   // Fetch the order
   const { data: order, error: fetchErr } = await admin
     .from("coin_orders")
-    .select("id, user_id, package_id, coins, status")
+    .select("id, user_id, package_id, coins, status, transaction_id")
     .eq("id", orderId)
     .single();
 
@@ -132,14 +132,21 @@ export async function fulfillOrder(
     throw new Error(`Cannot fulfil order in status '${o.status}'`);
   }
 
-  // Mark paid
-  await admin
-    .from("coin_orders")
-    .update({ status: "paid", paid_at: new Date().toISOString(), gateway_payload: gatewayPayload ?? null })
-    .eq("id", orderId);
+  let txId: string;
+  if (o.status === "paid" && o.transaction_id) {
+    // creditCoins was already called but the fulfilled update failed on a previous attempt.
+    // Reuse the existing transaction id — do not credit again.
+    txId = o.transaction_id;
+  } else {
+    // Mark paid
+    await admin
+      .from("coin_orders")
+      .update({ status: "paid", paid_at: new Date().toISOString(), gateway_payload: gatewayPayload ?? null })
+      .eq("id", orderId);
 
-  // Credit coins and get transaction id
-  const txId = await creditCoins(o.user_id, o.coins, `Top-up: order ${orderId}`);
+    // Credit coins and get transaction id
+    txId = await creditCoins(o.user_id, o.coins, `Top-up: order ${orderId}`);
+  }
 
   // Mark fulfilled
   await admin
@@ -161,6 +168,24 @@ export async function failOrder(
   status: "failed" | "cancelled" = "failed",
 ): Promise<void> {
   const admin = createAdminClient();
+
+  // Guard: fetch current status to prevent corrupting fulfilled orders
+  const { data: order, error: fetchErr } = await admin
+    .from("coin_orders")
+    .select("id, status")
+    .eq("id", orderId)
+    .single();
+
+  if (fetchErr || !order) throw new Error(`Order not found: ${fetchErr?.message}`);
+  const currentStatus = (order as Pick<CoinOrderRow, "id" | "status">).status;
+
+  if (currentStatus === "fulfilled") {
+    throw new Error(`Cannot ${status} a fulfilled order`);
+  }
+  if (currentStatus === status || currentStatus === "failed" || currentStatus === "cancelled") {
+    return; // already in a terminal state — idempotent
+  }
+
   const ts = new Date().toISOString();
   await admin
     .from("coin_orders")

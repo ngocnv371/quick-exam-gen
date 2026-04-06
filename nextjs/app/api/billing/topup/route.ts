@@ -50,6 +50,20 @@ export async function POST(req: NextRequest) {
 
   const p = pkg as CoinPackage;
 
+  // Rate-limit: cap pending orders per user to prevent admin queue flooding
+  const { count, error: countErr } = await supabase
+    .from("coin_orders")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("status", "pending");
+
+  if (!countErr && count !== null && count >= 3) {
+    return NextResponse.json(
+      { error: "You have too many pending orders. Wait for them to be processed before placing a new one." },
+      { status: 429 },
+    );
+  }
+
   // Create pending order — fulfilled manually by an admin
   const orderId = await createOrder(supabase, user.id, p.id, p.coins, p.price_cents, p.currency);
 
