@@ -4,8 +4,8 @@ import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { isDocxFile, extractDocxContent } from "@/app/projects/[id]/_components/docx-file-preview-extractor";
-import { isPdfFile, extractPdfContent } from "@/app/projects/[id]/_components/pdf-file-preview-extractor";
+import { extractPdfContent, isPdfFile } from "@/app/(dashboard)/projects/[id]/_components/pdf-file-preview-extractor";
+import { extractDocxContent, isDocxFile } from "@/app/(dashboard)/projects/[id]/_components/docx-file-preview-extractor";
 
 export function QuickUploadHero() {
   const router = useRouter();
