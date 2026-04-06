@@ -12,7 +12,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { OrdersTable, type AdminOrderRow } from "./_components/orders-table";
 import type { CoinOrderRow } from "@/lib/billing";
 
-type StatusFilter = "pending" | "all" | "fulfilled" | "failed";
+type StatusFilter = "pending" | "all" | "fulfilled" | "failed" | "cancelled";
 
 async function OrdersContent({ status }: { status: StatusFilter }) {
   const admin = createAdminClient();
@@ -62,7 +62,8 @@ export default function AdminOrdersPage() {
   const tabs: { value: StatusFilter; label: string }[] = [
     { value: "pending", label: "Pending" },
     { value: "fulfilled", label: "Fulfilled" },
-    { value: "failed", label: "Failed / Rejected" },
+    { value: "failed", label: "Failed" },
+    { value: "cancelled", label: "Cancelled" },
     { value: "all", label: "All" },
   ];
 
