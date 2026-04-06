@@ -38,8 +38,8 @@ export async function getCoinsBalance(supabase: SupabaseClient): Promise<number>
 }
 
 /**
- * Deduct coins by inserting a negative 'export' transaction.
- * Runs as service-role to bypass RLS (writes are service-role only per migration).
+ * Deduct coins by calling the billing_deduct_coins RPC.
+ * Runs as service-role to bypass RLS.
  */
 export async function deductCoins(
   userId: string,
@@ -48,18 +48,17 @@ export async function deductCoins(
   note?: string,
 ): Promise<void> {
   const admin = createAdminClient();
-  const { error } = await admin.from("coins_transactions").insert({
-    user_id: userId,
-    amount: -amount,
-    type: "export",
-    ref_id: refId ?? null,
-    note: note ?? null,
+  const { error } = await admin.rpc("billing_deduct_coins", {
+    p_user_id: userId,
+    p_amount: amount,
+    p_ref_id: refId ?? null,
+    p_note: note ?? null,
   });
   if (error) throw new Error(`Failed to deduct coins: ${error.message}`);
 }
 
 /**
- * Credit coins by inserting a positive 'purchase' transaction.
+ * Credit coins by calling the billing_credit_coins RPC.
  * Returns the new transaction's id.
  * Runs as service-role to bypass RLS.
  */
@@ -69,13 +68,13 @@ export async function creditCoins(
   note?: string,
 ): Promise<string> {
   const admin = createAdminClient();
-  const { data, error } = await admin
-    .from("coins_transactions")
-    .insert({ user_id: userId, amount, type: "purchase", note: note ?? null })
-    .select("id")
-    .single();
+  const { data, error } = await admin.rpc("billing_credit_coins", {
+    p_user_id: userId,
+    p_amount: amount,
+    p_note: note ?? null,
+  });
   if (error || !data) throw new Error(`Failed to credit coins: ${error?.message}`);
-  return (data as { id: string }).id;
+  return data as string;
 }
 
 // ============================================================
@@ -126,90 +125,36 @@ export async function createOrder(
 }
 
 /**
- * Transition an order to 'paid' and then 'fulfilled', crediting coins atomically.
- * Called from the (simulated) payment webhook — uses service-role to bypass RLS.
+ * Atomically transition an order through pending → paid → fulfilled and
+ * credit the user's coins via a single billing_fulfill_order RPC call.
+ * Idempotent — safe to retry on network failures.
+ * Runs as service-role to bypass RLS.
  */
 export async function fulfillOrder(
   orderId: string,
   gatewayPayload?: Record<string, unknown>,
 ): Promise<void> {
   const admin = createAdminClient();
-
-  // Fetch the order
-  const { data: order, error: fetchErr } = await admin
-    .from("coin_orders")
-    .select("id, user_id, package_id, coins, status, transaction_id")
-    .eq("id", orderId)
-    .single();
-
-  if (fetchErr || !order) throw new Error(`Order not found: ${fetchErr?.message}`);
-  const o = order as CoinOrderRow;
-
-  if (o.status === "fulfilled") return; // idempotent
-  if (o.status !== "pending" && o.status !== "paid") {
-    throw new Error(`Cannot fulfil order in status '${o.status}'`);
-  }
-
-  let txId: string;
-  if (o.status === "paid" && o.transaction_id) {
-    // creditCoins was already called but the fulfilled update failed on a previous attempt.
-    // Reuse the existing transaction id — do not credit again.
-    txId = o.transaction_id;
-  } else {
-    // Mark paid
-    await admin
-      .from("coin_orders")
-      .update({ status: "paid", paid_at: new Date().toISOString(), gateway_payload: gatewayPayload ?? null })
-      .eq("id", orderId);
-
-    // Credit coins and get transaction id
-    txId = await creditCoins(o.user_id, o.coins, `Top-up: order ${orderId}`);
-  }
-
-  // Mark fulfilled
-  await admin
-    .from("coin_orders")
-    .update({
-      status: "fulfilled",
-      fulfilled_at: new Date().toISOString(),
-      transaction_id: txId,
-    })
-    .eq("id", orderId);
+  const { error } = await admin.rpc("billing_fulfill_order", {
+    p_order_id: orderId,
+    p_gateway_payload: gatewayPayload ?? null,
+  });
+  if (error) throw new Error(`Failed to fulfill order: ${error.message}`);
 }
 
 /**
- * Mark an order as failed or cancelled.
- * Uses service-role to bypass RLS.
+ * Mark an order as failed or cancelled via the billing_fail_order RPC.
+ * Guards against corrupting fulfilled orders; idempotent on terminal states.
+ * Runs as service-role to bypass RLS.
  */
 export async function failOrder(
   orderId: string,
   status: "failed" | "cancelled" = "failed",
 ): Promise<void> {
   const admin = createAdminClient();
-
-  // Guard: fetch current status to prevent corrupting fulfilled orders
-  const { data: order, error: fetchErr } = await admin
-    .from("coin_orders")
-    .select("id, status")
-    .eq("id", orderId)
-    .single();
-
-  if (fetchErr || !order) throw new Error(`Order not found: ${fetchErr?.message}`);
-  const currentStatus = (order as Pick<CoinOrderRow, "id" | "status">).status;
-
-  if (currentStatus === "fulfilled") {
-    throw new Error(`Cannot ${status} a fulfilled order`);
-  }
-  if (currentStatus === status || currentStatus === "failed" || currentStatus === "cancelled") {
-    return; // already in a terminal state — idempotent
-  }
-
-  const ts = new Date().toISOString();
-  await admin
-    .from("coin_orders")
-    .update({
-      status,
-      ...(status === "failed" ? { failed_at: ts } : { cancelled_at: ts }),
-    })
-    .eq("id", orderId);
+  const { error } = await admin.rpc("billing_fail_order", {
+    p_order_id: orderId,
+    p_status: status,
+  });
+  if (error) throw new Error(`Failed to ${status} order: ${error.message}`);
 }

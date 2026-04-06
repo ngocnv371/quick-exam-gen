@@ -194,3 +194,185 @@ grant select on public.coin_packages      to authenticated;
 grant select, insert on public.coin_orders to authenticated;
 -- Allow anonymous users to browse packages
 grant select on public.coin_packages      to anon;
+
+-- ============================================================
+-- 8. Billing RPC functions  (service_role only)
+--
+-- All functions are SECURITY DEFINER and restricted to
+-- service_role. They are called exclusively via the admin
+-- Supabase client so that each operation is a single atomic
+-- DB round-trip.
+-- ============================================================
+
+-- 8a. billing_deduct_coins
+--     Insert a negative 'export' transaction for a user.
+create or replace function public.billing_deduct_coins(
+  p_user_id uuid,
+  p_amount  integer,
+  p_ref_id  uuid    default null,
+  p_note    text    default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if p_amount <= 0 then
+    raise exception 'Deduction amount must be positive, got %', p_amount;
+  end if;
+
+  insert into public.coins_transactions (user_id, amount, type, ref_id, note)
+  values (p_user_id, -p_amount, 'export', p_ref_id, p_note);
+end;
+$$;
+
+revoke execute on function public.billing_deduct_coins(uuid, integer, uuid, text) from public, anon, authenticated;
+
+-- 8b. billing_credit_coins
+--     Insert a positive 'purchase' transaction for a user.
+--     Returns the new transaction id.
+create or replace function public.billing_credit_coins(
+  p_user_id uuid,
+  p_amount  integer,
+  p_note    text default null
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_tx_id uuid;
+begin
+  if p_amount <= 0 then
+    raise exception 'Credit amount must be positive, got %', p_amount;
+  end if;
+
+  insert into public.coins_transactions (user_id, amount, type, note)
+  values (p_user_id, p_amount, 'purchase', p_note)
+  returning id into v_tx_id;
+
+  return v_tx_id;
+end;
+$$;
+
+revoke execute on function public.billing_credit_coins(uuid, integer, text) from public, anon, authenticated;
+
+-- 8c. billing_fulfill_order
+--     Atomically transition an order through pending → paid →
+--     fulfilled and credit the user's coins.
+--     Idempotent: a second call on an already-fulfilled order is a no-op.
+create or replace function public.billing_fulfill_order(
+  p_order_id        uuid,
+  p_gateway_payload jsonb default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_order record;
+  v_tx_id uuid;
+begin
+  -- Lock the row to prevent concurrent fulfillment races
+  select id, user_id, coins, status, transaction_id
+    into v_order
+    from public.coin_orders
+   where id = p_order_id
+     for update;
+
+  if not found then
+    raise exception 'Order not found: %', p_order_id;
+  end if;
+
+  -- Idempotent — already done
+  if v_order.status = 'fulfilled' then
+    return;
+  end if;
+
+  if v_order.status not in ('pending', 'paid') then
+    raise exception 'Cannot fulfil order in status ''%''', v_order.status;
+  end if;
+
+  if v_order.status = 'paid' and v_order.transaction_id is not null then
+    -- A previous attempt already credited coins but crashed before marking
+    -- fulfilled. Reuse the existing transaction — do NOT credit again.
+    v_tx_id := v_order.transaction_id;
+  else
+    -- Mark paid
+    update public.coin_orders
+       set status          = 'paid',
+           paid_at         = now(),
+           gateway_payload = coalesce(p_gateway_payload, gateway_payload)
+     where id = p_order_id;
+
+    -- Credit coins (triggers balance update via trg_coins_transactions_balance)
+    insert into public.coins_transactions (user_id, amount, type, note)
+    values (v_order.user_id, v_order.coins, 'purchase',
+            'Top-up: order ' || p_order_id::text)
+    returning id into v_tx_id;
+  end if;
+
+  -- Mark fulfilled
+  update public.coin_orders
+     set status         = 'fulfilled',
+         fulfilled_at   = now(),
+         transaction_id = v_tx_id
+   where id = p_order_id;
+end;
+$$;
+
+revoke execute on function public.billing_fulfill_order(uuid, jsonb) from public, anon, authenticated;
+
+-- 8d. billing_fail_order
+--     Mark an order as 'failed' or 'cancelled'.
+--     Guards against corrupting fulfilled orders.
+--     Idempotent: a second call on an already-terminal order is a no-op.
+create or replace function public.billing_fail_order(
+  p_order_id uuid,
+  p_status   text default 'failed'   -- 'failed' | 'cancelled'
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_current_status text;
+begin
+  if p_status not in ('failed', 'cancelled') then
+    raise exception
+      'Invalid target status ''%''. Must be ''failed'' or ''cancelled''',
+      p_status;
+  end if;
+
+  select status
+    into v_current_status
+    from public.coin_orders
+   where id = p_order_id
+     for update;
+
+  if not found then
+    raise exception 'Order not found: %', p_order_id;
+  end if;
+
+  if v_current_status = 'fulfilled' then
+    raise exception 'Cannot % a fulfilled order', p_status;
+  end if;
+
+  -- Already in a terminal state — idempotent
+  if v_current_status in ('failed', 'cancelled') then
+    return;
+  end if;
+
+  update public.coin_orders
+     set status       = p_status,
+         failed_at    = case when p_status = 'failed'    then now() else failed_at    end,
+         cancelled_at = case when p_status = 'cancelled' then now() else cancelled_at end
+   where id = p_order_id;
+end;
+$$;
+
+revoke execute on function public.billing_fail_order(uuid, text) from public, anon, authenticated;
