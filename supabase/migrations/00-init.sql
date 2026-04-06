@@ -22,6 +22,8 @@ create table public.profiles (
   id          uuid        primary key references auth.users(id) on delete cascade,
   display_name text,
   avatar_url  text,
+  role        text        not null default 'user'
+                check (role in ('user', 'admin')),
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
@@ -39,7 +41,25 @@ create policy "profiles: owner select"
 create policy "profiles: owner update"
   on public.profiles for update
   using (id = auth.uid())
-  with check (id = auth.uid());
+  with check (id = auth.uid() and role = (select role from public.profiles where id = auth.uid()));
+
+-- Helper: returns true when the calling user is an admin
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$$;
+
+create policy "profiles: admin select all"
+  on public.profiles for select
+  using (public.is_admin());
 
 -- ============================================================
 -- 2. projects
