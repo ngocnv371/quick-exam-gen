@@ -20,7 +20,7 @@ export async function CoinsBadge() {
 
   return (
     <Link
-      href="/projects/billing"
+      href="/billing"
       className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
       title="View coin transactions"
     >

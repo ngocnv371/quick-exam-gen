@@ -41,6 +41,7 @@ create policy "profiles: owner select"
 create policy "profiles: owner update"
   on public.profiles for update
   using (id = auth.uid())
+  -- Note: we allow users to update their own profile, but the role column is frozen — it must stay the same as the existing value in the database. Only service-role can change it.
   with check (id = auth.uid() and role = (select role from public.profiles where id = auth.uid()));
 
 -- Helper: returns true when the calling user is an admin

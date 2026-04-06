@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { creditCoins } from "@/lib/billing";
+import { createOrder } from "@/lib/billing";
 import type { CoinPackage } from "@/lib/coin-packages";
 
 /**
  * POST /api/billing/topup
  *
- * Simulates a "payment confirmed" webhook from a payment processor.
- * When a real gateway is integrated replace this handler with a proper
- * signature-verified webhook endpoint and remove the auth check (webhooks
- * are server-to-server). Until then this is protected by the user's session.
+ * Creates a pending coin order. Fulfillment happens manually via the admin
+ * order management panel (/projects/admin/orders).
+ *
+ * When a real payment gateway is integrated:
+ *  1. This route creates the order (status=pending) and returns a checkout URL.
+ *  2. A separate /api/billing/webhook route handles the signed gateway callback
+ *     and calls fulfillOrder() — no user auth required there.
  */
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
@@ -33,20 +36,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "packageId is required" }, { status: 400 });
   }
 
-  // Validate against the DB — uses the anon key but RLS allows public reads on active packages
-  const { data: pkg, error } = await supabase
+  // Validate package against the DB
+  const { data: pkg, error: pkgErr } = await supabase
     .from("coin_packages")
     .select("id, label, coins, price_cents, currency")
     .eq("id", packageId)
     .eq("active", true)
     .single();
 
-  if (error || !pkg) {
+  if (pkgErr || !pkg) {
     return NextResponse.json({ error: "Unknown or inactive package" }, { status: 400 });
   }
 
   const p = pkg as CoinPackage;
-  await creditCoins(user.id, p.coins, `Top-up: ${p.label}`);
 
-  return NextResponse.json({ credited: p.coins });
+  // Create pending order — fulfilled manually by an admin
+  const orderId = await createOrder(supabase, user.id, p.id, p.coins, p.price_cents, p.currency);
+
+  return NextResponse.json({ orderId });
 }

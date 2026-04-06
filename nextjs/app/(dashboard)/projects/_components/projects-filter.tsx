@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { STATUS_OPTIONS } from "@/app/projects/_lib/constants";
+import { STATUS_OPTIONS } from "../_lib/constants";
 
 export function ProjectsFilter({ currentStatus }: { currentStatus: string }) {
   const router = useRouter();

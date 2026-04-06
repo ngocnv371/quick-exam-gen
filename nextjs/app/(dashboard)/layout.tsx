@@ -44,10 +44,16 @@ export default function ProjectsLayout({
               Projects
             </Link>
             <Link
-              href="/projects/billing"
+              href="/billing"
               className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
             >
               Billing
+            </Link>
+            <Link
+              href="/admin/orders"
+              className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
+            >
+              Admin
             </Link>
           </div>
           <div className="flex items-center gap-3">

@@ -116,16 +116,81 @@ insert into public.coin_packages (id, label, coins, price_cents, sort_order) val
   ('unlimited', 'Unlimited', 300, 3499, 4);
 
 -- ============================================================
--- 5. Indexes
+-- 5. coin_orders  (purchase lifecycle tracking)
+-- ============================================================
+-- Lifecycle: pending → paid → fulfilled
+--                    └→ failed
+--                    └→ cancelled
+--
+-- pending    — user selected a package and initiated checkout
+-- paid       — payment processor confirmed payment received
+-- fulfilled  — coins have been credited to the user's balance
+-- failed     — payment was declined or timed out
+-- cancelled  — user cancelled before paying
+create table public.coin_orders (
+  id                 uuid        primary key default gen_random_uuid(),
+  user_id            uuid        not null references auth.users(id) on delete cascade,
+  package_id         text        not null references public.coin_packages(id),
+  status             text        not null default 'pending'
+                       check (status in ('pending', 'paid', 'fulfilled', 'failed', 'cancelled')),
+  coins              integer     not null check (coins > 0),  -- snapshot at order time
+  price_cents        integer     not null check (price_cents > 0),
+  currency           text        not null default 'USD',
+  -- Payment gateway fields (populate when gateway is integrated)
+  gateway            text,        -- e.g. 'stripe', 'paypal'
+  gateway_order_id   text,        -- ID from the payment provider
+  gateway_payload    jsonb,       -- raw webhook / event payload for audit
+  -- Linked ledger entry (set when status → fulfilled)
+  transaction_id     uuid        references public.coins_transactions(id),
+  -- Timestamps for each status transition
+  paid_at            timestamptz,
+  fulfilled_at       timestamptz,
+  failed_at          timestamptz,
+  cancelled_at       timestamptz,
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now()
+);
+
+create trigger trg_coin_orders_updated_at
+  before update on public.coin_orders
+  for each row execute function public.set_updated_at();
+
+alter table public.coin_orders enable row level security;
+
+-- Users can read their own orders
+create policy "coin_orders: owner select"
+  on public.coin_orders for select
+  using (user_id = auth.uid());
+
+-- Users can insert their own pending orders (initiating checkout)
+create policy "coin_orders: owner insert"
+  on public.coin_orders for insert
+  with check (user_id = auth.uid() and status = 'pending');
+
+-- Status transitions and gateway writes are service-role only (via webhook handler)
+
+-- ============================================================
+-- 6. Indexes
 -- ============================================================
 create index idx_coins_transactions_user_created
   on public.coins_transactions (user_id, created_at desc);
 
+create index idx_coin_orders_user_created
+  on public.coin_orders (user_id, created_at desc);
+
+create index idx_coin_orders_status
+  on public.coin_orders (status);
+
+create index idx_coin_orders_gateway_order_id
+  on public.coin_orders (gateway_order_id)
+  where gateway_order_id is not null;
+
 -- ============================================================
--- 6. Grants for authenticated role
+-- 7. Grants for authenticated role
 -- ============================================================
 grant select on public.coins_transactions to authenticated;
 grant select on public.coins_balance      to authenticated;
 grant select on public.coin_packages      to authenticated;
+grant select, insert on public.coin_orders to authenticated;
 -- Allow anonymous users to browse packages
 grant select on public.coin_packages      to anon;

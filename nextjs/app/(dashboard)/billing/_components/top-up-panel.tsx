@@ -28,10 +28,10 @@ export function TopUpPanel({ packages }: { packages: CoinPackage[] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ packageId: selected }),
       });
-      const data = (await res.json()) as { credited?: number; error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Top-up failed");
+      const data = (await res.json()) as { orderId?: string; error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Order failed");
       const pkg = packages.find((p) => p.id === selected)!;
-      toast.success(`${pkg.coins} coins added to your account!`);
+      toast.success(`Order placed for ${pkg.coins} coins — awaiting admin approval.`);
       router.refresh();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -51,11 +51,7 @@ export function TopUpPanel({ packages }: { packages: CoinPackage[] }) {
           Top Up Coins
         </CardTitle>
         <CardDescription>
-          Select a package below.{" "}
-          <span className="text-amber-500 font-medium">
-            Payment gateway coming soon —
-          </span>{" "}
-          use the simulated confirm button for now.
+          Select a package and place your order. Coins will be credited once an admin approves your payment.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
@@ -96,18 +92,15 @@ export function TopUpPanel({ packages }: { packages: CoinPackage[] }) {
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Processing…
+                Placing order…
               </>
             ) : (
               <>
                 <CheckCircle2 className="h-4 w-4" />
-                Payment confirmed — add {selectedPkg?.coins ?? 0} coins
+                Buy {selectedPkg?.coins ?? 0} coins — {selectedPkg ? formatPackagePrice(selectedPkg) : ""}
               </>
             )}
           </Button>
-          <span className="text-xs text-foreground/40 italic">
-            Simulates a payment webhook
-          </span>
         </div>
       </CardContent>
     </Card>
