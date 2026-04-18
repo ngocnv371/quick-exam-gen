@@ -1,6 +1,32 @@
 {
+  "Error": {
+    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "title": "Something went wrong!"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, vi {Tiếng Việt} en {English} other {Unknown}}"
+  },
+  "NotFoundPage": {
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "title": "Page not found"
+  },
   "HomePage": {
     "title": "Quick Exam Gen!",
     "projects": "Projects"
+  },
+  "Projects": {
+    "noProjects": "No projects created yet. Start by creating a new project!",
+    "createProject": "Create New Project"
+  },
+  "Menu": {
+    "home": "Home",
+    "projects": "Projects",
+    "billing": "Billing",
+    "admin": "Admin"
+  },
+  "Metadata": {
+    "title": "Quick Exam Gen - Easy Online Exam Creation",
+    "description": "Quick Exam Gen is an online exam creation tool that helps teachers and students create high-quality exams quickly and easily."
   }
 }

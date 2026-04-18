@@ -1,6 +1,8 @@
 import { AuthButton } from "@/components/auth-button";
 import { CoinsBadge } from "@/components/coins-badge";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -9,6 +11,7 @@ export default function ProjectsLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("Menu");
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* Subtle grid bg */}
@@ -41,20 +44,21 @@ export default function ProjectsLayout({
               href="/projects"
               className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
             >
-              Projects
+              {t("projects")}
             </Link>
             <Link
               href="/billing"
               className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
             >
-              Billing
+              {t("billing")}
             </Link>
             <Link
               href="/admin/orders"
               className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
             >
-              Admin
+              {t("admin")}
             </Link>
+            <LocaleSwitcher />
           </div>
           <div className="flex items-center gap-3">
             <Suspense>

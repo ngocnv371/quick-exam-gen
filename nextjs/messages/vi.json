@@ -1,6 +1,31 @@
 {
+  "Error": {
+    "description": "<p>Rất tiếc, đã xảy ra lỗi.</p><p>Bạn có thể thử <retry>tải lại trang</retry> bạn đang truy cập.</p>",
+    "title": "Đã xảy ra sự cố!"
+  },
+  "LocaleSwitcher": {
+    "label": "Thay đổi ngôn ngữ",
+    "locale": "{locale, select, vi {Tiếng Việt} en {English} other {Unknown}}"
+  },
+  "NotFoundPage": {
+    "description": "Vui lòng kiểm tra lại thanh địa chỉ của trình duyệt hoặc sử dụng điều hướng để đi đến một trang đã biết.",
+    "title": "Không tìm thấy trang"
+  },
   "HomePage": {
-    "title": "Làm Đề Nhanh!",
-    "projects": "Bài Tập"
+    "title": "Làm Đề Nhanh!"
+  },
+  "Projects": {
+    "noProjects": "Chưa có bài tập nào được tạo. Bắt đầu bằng cách tạo một bài tập mới!",
+    "createProject": "Tạo Bài Tập Mới"
+  },
+  "Menu": {
+    "home": "Trang Chủ",
+    "projects": "Bài Tập",
+    "billing": "Thanh Toán",
+    "admin": "Quản Trị"
+  },
+  "Metadata": {
+    "title": "Làm Đề Nhanh - Tạo Bài Tập Trực Tuyến Dễ Dàng",
+    "description": "Làm Đề Nhanh là công cụ tạo bài tập trực tuyến giúp giáo viên và học sinh tạo ra các bài tập chất lượng cao một cách nhanh chóng và dễ dàng."
   }
 }
