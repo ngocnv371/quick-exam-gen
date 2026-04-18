@@ -12,7 +12,110 @@
     "title": "Không tìm thấy trang"
   },
   "HomePage": {
-    "title": "Làm Đề Nhanh!"
+    "title": "Làm Đề Nhanh!",
+    "projects": "Bài Tập",
+    "aiHero": "Tạo đề thi bằng AI",
+    "heroTitle": "Biến mọi tài liệu thành câu hỏi sẵn sàng cho đề thi",
+    "heroSubtitle": "Tải lên file PDF hoặc Word, để AI trích xuất ý chính và tạo ngân hàng câu hỏi với nhiều biến thể chỉ trong 60 giây.",
+    "createProject": "Tạo dự án thủ công",
+    "viewProjects": "Xem tất cả dự án",
+    "socialEducators": "2.400+ giáo viên",
+    "socialRating": "Đánh giá trung bình 4.9",
+    "socialSpeed": "Trung bình 47 giây/đề",
+    "useCasesTitle": "Ai sử dụng Làm Đề Nhanh?",
+    "useCasesSubtitle": "Dù bạn dạy 30 học sinh hay đào tạo 3.000 nhân viên, chúng tôi đều hỗ trợ bạn.",
+    "useCases": [
+      {
+        "icon": "book-open",
+        "title": "Giáo viên & Nhà giáo",
+        "description": "Biến ghi chú bài giảng hoặc chương sách thành đề thi sẵn sàng in chỉ trong vài giây. Không còn phải thức khuya ra đề thủ công."
+      },
+      {
+        "icon": "building-2",
+        "title": "Trường học & Tổ chức",
+        "description": "Chuẩn hóa chất lượng đề thi giữa các phòng ban. Tạo nhiều biến thể đề để chống gian lận mà không tốn thêm công sức."
+      },
+      {
+        "icon": "users",
+        "title": "Trung tâm luyện thi",
+        "description": "Tạo bộ đề luyện tập cá nhân hóa cho từng học viên từ một tài liệu nguồn. Nhiều bài tập, ít thời gian chuẩn bị."
+      },
+      {
+        "icon": "graduation-cap",
+        "title": "Tự học",
+        "description": "Tải lên tài liệu học tập và nhận ngay bộ câu hỏi tự kiểm tra. Ôn tập chủ động dễ dàng hơn."
+      },
+      {
+        "icon": "flask-conical",
+        "title": "Đào tạo doanh nghiệp",
+        "description": "Chuyển đổi tài liệu đào tạo, quy trình thành bài kiểm tra. Đánh giá kiến thức nhân viên mà không cần thuê đội nội dung."
+      },
+      {
+        "icon": "zap",
+        "title": "Tổ chức sự kiện & Hackathon",
+        "description": "Cần bộ câu hỏi trắc nghiệm trong 5 phút? Chỉ cần tải tài liệu lên và nhận ngay bộ đề hoàn chỉnh."
+      }
+    ],
+    "howItWorksTitle": "Cách hoạt động",
+    "howItWorks": [
+      {
+        "step": "01",
+        "title": "Tải tài liệu lên",
+        "body": "Kéo thả file PDF hoặc Word — ghi chú, giáo trình, tài liệu đào tạo, bất cứ gì."
+      },
+      {
+        "step": "02", 
+        "title": "AI trích xuất kiến thức",
+        "body": "AI đọc nội dung, xác định ý chính và tự động tạo câu hỏi chất lượng cao."
+      },
+      {
+        "step": "03",
+        "title": "Xuất & chia sẻ ngay",
+        "body": "Tải về đề thi sẵn sàng in với nhiều biến thể, hoặc chia sẻ link cho học viên ngay lập tức."
+      }
+    ],
+    "testimonialsTitle": "Được giáo viên toàn cầu yêu thích",
+    "testimonialsSubtitle": "Hàng ngàn giáo viên, huấn luyện viên và học viên tiết kiệm hàng giờ mỗi tuần với Làm Đề Nhanh.",
+    "testimonials": [
+      {
+        "name": "Nguyễn Thị Lan",
+        "role": "Giáo viên Sinh học THPT",
+        "quote": "Tôi từng mất 3-4 tiếng để ra mỗi đề. Giờ chỉ cần tải ghi chú lên là có ngay ngân hàng câu hỏi. Chất lượng thực sự bất ngờ."
+      },
+      {
+        "name": "Marcus Webb",
+        "role": "Quản lý đào tạo doanh nghiệp",
+        "quote": "Chúng tôi đã tạo 12 bài kiểm tra tuân thủ quý trước với Làm Đề Nhanh. Đội ngũ tiết kiệm khoảng 40 giờ làm nội dung. Không hiểu sao không biết sớm hơn!"
+      },
+      {
+        "name": "TS. Priya Sharma",
+        "role": "Giảng viên Đại học CNTT",
+        "quote": "Tạo nhiều biến thể đề là bước ngoặt cho lớp đông. Mỗi học viên một đề khác nhau nhưng cùng mục tiêu. Không tốn thêm công sức."
+      },
+      {
+        "name": "Tomás Reyes",
+        "role": "Sáng lập TutorHive",
+        "quote": "Gia sư của chúng tôi dùng hàng ngày để tạo bộ đề luyện tập. Tải lên nhanh, câu hỏi chuẩn, xuất file đẹp. Sản phẩm tốt."
+      },
+      {
+        "name": "Aiko Tanaka",
+        "role": "Huấn luyện viên luyện thi",
+        "quote": "Tôi luyện thi cho học sinh thi quốc gia. Có thể tạo hàng trăm câu hỏi từ đề cũ chỉ trong vài phút là vô giá."
+      },
+      {
+        "name": "Emily Chen",
+        "role": "Tự học & Sinh viên Y",
+        "quote": "Tôi tải slide bài giảng lên và có ngay đề tự kiểm tra. Giúp tôi nhớ lâu hơn thay vì chỉ đọc lại tài liệu."
+      }
+    ],
+    "finalCtaTitle": "Sẵn sàng tiết kiệm hàng giờ mỗi tuần?",
+    "finalCtaSubtitle": "Tham gia cùng hàng ngàn giáo viên đã bỏ qua việc ra đề thủ công. Đề đầu tiên miễn phí — không cần thẻ tín dụng.",
+    "getStarted": "Bắt đầu miễn phí",
+    "noCreditCard": "Không cần thẻ tín dụng · Hủy bất cứ lúc nào",
+    "footerCopyright": "© {year} Làm Đề Nhanh. Đã đăng ký bản quyền.",
+    "footerLogin": "Đăng nhập",
+    "footerSignup": "Đăng ký",
+    "footerProjects": "Bài Tập"
   },
   "Projects": {
     "noProjects": "Chưa có bài tập nào được tạo. Bắt đầu bằng cách tạo một bài tập mới!",

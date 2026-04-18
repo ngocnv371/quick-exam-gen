@@ -13,7 +13,110 @@
   },
   "HomePage": {
     "title": "Quick Exam Gen!",
-    "projects": "Projects"
+    "projects": "Projects",
+    "aiHero": "AI-powered exam generation",
+    "heroTitle": "Turn any document into exam-ready questions",
+    "heroSubtitle": "Upload a PDF or Word file, let AI extract the key concepts, and get a full question bank with multiple variants — in under 60 seconds.",
+    "createProject": "Create project manually",
+    "viewProjects": "View all projects",
+    "socialEducators": "2,400+ educators",
+    "socialRating": "4.9 average rating",
+    "socialSpeed": "Avg. 47 seconds per exam",
+    "useCasesTitle": "Who uses Quick Exam Gen?",
+    "useCasesSubtitle": "Whether you teach a class of 30 or train a team of 3,000, we've got you covered.",
+    "useCases": [
+      {
+        "icon": "book-open",
+        "title": "Teachers & Educators",
+        "description": "Turn your lecture notes or textbook chapters into polished, ready-to-print exams in seconds. Stop spending evenings writing questions by hand."
+      },
+      {
+        "icon": "building-2",
+        "title": "Schools & Institutions",
+        "description": "Standardize exam quality across departments. Generate multiple variants of the same test to prevent cheating without extra effort."
+      },
+      {
+        "icon": "users",
+        "title": "Tutoring Centers",
+        "description": "Create personalized practice sets for every student from a single source document. More practice, less prep time."
+      },
+      {
+        "icon": "graduation-cap",
+        "title": "Self-Learners",
+        "description": "Upload your study material and instantly get quiz questions to test yourself. Active recall made effortless."
+      },
+      {
+        "icon": "flask-conical",
+
+        "title": "Corporate Trainers",
+        "description": "Convert training manuals and SOPs into assessment quizzes. Verify employee knowledge without hiring a content team."
+      },
+      {
+        "icon": "zap",
+        "title": "Hackathon & Event Hosts",
+        "description": "Need a trivia round or knowledge check in 5 minutes? Drop in any document and get a full question set instantly."
+      }
+    ],
+    "howItWorksTitle": "How it works",
+    "howItWorks": [
+      {
+        "step": "01",
+        "title": "Upload your document",
+        "body": "Drag-and-drop a PDF or Word file — lecture notes, textbooks, training manuals, anything."
+      },
+      {
+        "step": "02",
+        "title": "AI extracts the knowledge",
+        "body": "Our AI reads the content, identifies key concepts, and generates high-quality questions automatically."
+      },
+      {
+        "step": "03",
+        "title": "Export & share instantly",
+        "body": "Download a print-ready exam with multiple variants, or share a link with your students right away."
+      }
+    ],
+    "testimonialsTitle": "Loved by educators worldwide",
+    "testimonialsSubtitle": "Thousands of teachers, trainers, and learners save hours every week with Quick Exam Gen.",
+    "testimonials": [
+      {
+        "name": "Nguyen Thi Lan",
+        "role": "High School Biology Teacher",
+        "quote": "I used to spend 3-4 hours writing each exam. Now I upload my chapter notes and have a full question bank in under a minute. The quality genuinely surprised me."
+      },
+      {
+        "name": "Marcus Webb",
+        "role": "Corporate L&D Manager",
+        "quote": "We rolled out 12 compliance quizzes last quarter using Quick Exam Gen. Our team saved roughly 40 hours of content work. I don't know why we didn't find this sooner."
+      },
+      {
+        "name": "Dr. Priya Sharma",
+        "role": "University Lecturer, Computer Science",
+        "quote": "Generating exam variants is a game-changer for large cohorts. Each student gets a slightly different paper but the same learning objectives. Zero extra effort on my end."
+      },
+      {
+        "name": "Tomás Reyes",
+        "role": "Founder, TutorHive",
+        "quote": "Our tutors use it daily to build practice sets for students. The drag-and-drop upload is fast, the questions are accurate, and the export is clean. Solid product."
+      },
+      {
+        "name": "Aiko Tanaka",
+        "role": "Competitive Exam Coach",
+        "quote": "I coach students for national entrance exams. Being able to generate hundreds of practice questions from past papers in minutes is absolutely invaluable."
+      },
+      {
+        "name": "Emily Chen",
+        "role": "Self-Learner & Med Student",
+        "quote": "I upload my lecture slides and get a self-quiz instantly. It helped me actually retain information instead of just re-reading the same slides over and over."
+      }
+    ],
+    "finalCtaTitle": "Ready to save hours every week?",
+    "finalCtaSubtitle": "Join thousands of educators who've ditched manual exam writing. Your first exam is free — no credit card required.",
+    "getStarted": "Get started for free",
+    "noCreditCard": "No credit card required · Cancel anytime",
+    "footerCopyright": "© {year} Quick Exam Gen. All rights reserved.",
+    "footerLogin": "Log in",
+    "footerSignup": "Sign up",
+    "footerProjects": "Projects"
   },
   "Projects": {
     "noProjects": "No projects created yet. Start by creating a new project!",
