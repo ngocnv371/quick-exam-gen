@@ -14,6 +14,7 @@ import {
   Building2,
   FlaskConical,
 } from "lucide-react";
+import {useTranslations} from 'next-intl';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -108,6 +109,7 @@ const TESTIMONIALS = [
 ];
 
 export default function Home() {
+  const t = useTranslations('HomePage');
   return (
     <main className="min-h-screen flex flex-col items-center relative overflow-hidden">
       {/* Ambient background blobs */}
@@ -127,9 +129,9 @@ export default function Home() {
         <nav className="w-full flex justify-center glass-nav h-16 sticky top-0 z-50">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-6 items-center font-semibold">
-              <Link href="/" className="text-foreground">Quick Exam Gen</Link>
+              <Link href="/" className="text-foreground">{t('title')}</Link>
               <Link href="/projects" className="text-foreground/50 hover:text-foreground transition-colors text-sm font-normal">
-                Projects
+                {t('projects')}
               </Link>
             </div>
             <div className="flex items-center gap-3">

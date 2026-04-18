@@ -7,6 +7,14 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  if (request.nextUrl.locale === 'default') {
+    const locale = request.cookies.get('NEXT_LOCALE')?.value || 'en'
+ 
+    return NextResponse.redirect(
+      new URL(`/${locale}${request.nextUrl.pathname}${request.nextUrl.search}`, request.url)
+    )
+  }
+
   // If the env vars are not set, skip proxy check. You can remove this
   // once you setup the project.
   if (!hasEnvVars) {
