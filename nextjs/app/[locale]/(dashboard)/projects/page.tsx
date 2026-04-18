@@ -1,22 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { createClient } from "@/lib/supabase/server";
 import { ProjectsFilter } from "./_components/projects-filter";
 import { Suspense } from "react";
-import { VALID_STATUSES, STATUS_BADGE, type ProjectStatus } from "./_lib/constants";
+import { VALID_STATUSES, type ProjectStatus } from "./_lib/constants";
+import { ProjectListItem } from "./_components/project-list-item";
+import { ProjectsPagination } from "./_components/projects-pagination";
+import { useTranslations } from "next-intl";
 
 const PAGE_SIZE = 10;
 
-function buildUrl(params: Record<string, string | undefined>) {
-  const p = new URLSearchParams();
-  for (const [k, v] of Object.entries(params)) {
-    if (v) p.set(k, v);
-  }
-  const qs = p.toString();
-  return `/projects${qs ? `?${qs}` : ""}`;
-}
+import { buildUrl } from "./_lib/build-url";
 
 async function ProjectsFilterWrapper({
   searchParams,
@@ -72,42 +67,12 @@ async function ProjectsList({
       ) : (
         <div className="flex flex-col divide-y divide-border/40 border border-border/50 rounded-lg overflow-hidden bg-card/50 backdrop-blur-sm">
           {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/projects/${project.id}`}
-              className="group flex items-center justify-between px-4 py-3.5 hover:bg-primary/5 hover:border-l-2 hover:border-l-primary transition-all duration-150"
-            >
-              <span className="font-medium truncate group-hover:text-primary transition-colors">{project.title}</span>
-              <div className="flex items-center gap-3 shrink-0 ml-4">
-                <Badge variant={STATUS_BADGE[project.status as ProjectStatus] ?? "secondary"}>
-                  {project.status}
-                </Badge>
-                <span className="text-xs text-foreground/40 tabular-nums">
-                  {new Date(project.updated_at).toLocaleDateString()}
-                </span>
-              </div>
-            </Link>
+            <ProjectListItem key={project.id} project={project} />
           ))}
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <Button asChild variant="outline" size="sm" disabled={page <= 1}>
-            <Link href={buildUrl({ page: String(page - 1), status: status ?? undefined })}>
-              Previous
-            </Link>
-          </Button>
-          <span className="text-sm text-foreground/60">
-            Page {page} of {totalPages}
-          </span>
-          <Button asChild variant="outline" size="sm" disabled={page >= totalPages}>
-            <Link href={buildUrl({ page: String(page + 1), status: status ?? undefined })}>
-              Next
-            </Link>
-          </Button>
-        </div>
-      )}
+      <ProjectsPagination page={page} totalPages={totalPages} status={status} buildUrl={buildUrl} />
     </>
   );
 }
@@ -117,12 +82,15 @@ export default function ProjectsPage({
 }: {
   searchParams: Promise<{ page?: string; status?: string }>;
 }) {
+  const t = useTranslations("Projects");
+  const tCommon = useTranslations("Common");
+
   return (
     <div className="flex flex-col gap-6 p-8 max-w-5xl mx-auto w-full">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Projects</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <Button asChild>
-          <Link href="/projects/new">New Project</Link>
+          <Link href="/projects/new">{t("createProject")}</Link>
         </Button>
       </div>
 
@@ -130,7 +98,7 @@ export default function ProjectsPage({
         <ProjectsFilterWrapper searchParams={searchParams} />
       </Suspense>
 
-      <Suspense fallback={<p className="text-foreground/60 text-sm">Loading...</p>}>
+      <Suspense fallback={<p className="text-foreground/60 text-sm">{tCommon("loading")}</p>}>
         <ProjectsList searchParams={searchParams} />
       </Suspense>
     </div>

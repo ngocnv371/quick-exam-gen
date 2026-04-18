@@ -1,4 +1,16 @@
 {
+  "Common": {
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu",
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "next": "Tiếp",
+    "previous": "Trước",
+    "pageInfo": "Trang {page} trên {totalPages}"
+  },
   "Error": {
     "description": "<p>Rất tiếc, đã xảy ra lỗi.</p><p>Bạn có thể thử <retry>tải lại trang</retry> bạn đang truy cập.</p>",
     "title": "Đã xảy ra sự cố!"
@@ -10,6 +22,16 @@
   "NotFoundPage": {
     "description": "Vui lòng kiểm tra lại thanh địa chỉ của trình duyệt hoặc sử dụng điều hướng để đi đến một trang đã biết.",
     "title": "Không tìm thấy trang"
+  },
+  "QuickUploadHero": {
+    "processing": "Đang tạo dự án…",
+    "dropToCreate": "Thả để tạo dự án",
+    "dropOrBrowse": "Thả file hoặc bấm để chọn",
+    "fileHint": "PDF hoặc DOCX — dự án sẽ được tạo ngay lập tức",
+    "unsupportedType": "Không hỗ trợ loại file này. Vui lòng dùng PDF hoặc DOCX.",
+    "errorGeneric": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "loginRedirect": "Bạn cần đăng nhập để tạo dự án.",
+    "ariaLabel": "Tải file lên để tạo dự án"
   },
   "HomePage": {
     "title": "Làm Đề Nhanh!",
@@ -64,7 +86,7 @@
         "body": "Kéo thả file PDF hoặc Word — ghi chú, giáo trình, tài liệu đào tạo, bất cứ gì."
       },
       {
-        "step": "02", 
+        "step": "02",
         "title": "AI trích xuất kiến thức",
         "body": "AI đọc nội dung, xác định ý chính và tự động tạo câu hỏi chất lượng cao."
       },
@@ -118,12 +140,14 @@
     "footerProjects": "Bài Tập"
   },
   "Projects": {
-    "noProjects": "Chưa có bài tập nào được tạo. Bắt đầu bằng cách tạo một bài tập mới!",
-    "createProject": "Tạo Bài Tập Mới"
+    "title": "Đề Của Tôi",
+    "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
+    "createProject": "Tạo Đề Mới"
   },
   "Menu": {
+    "title": "Làm Đề Nhanh",
     "home": "Trang Chủ",
-    "projects": "Bài Tập",
+    "projects": "Đề",
     "billing": "Thanh Toán",
     "admin": "Quản Trị"
   },

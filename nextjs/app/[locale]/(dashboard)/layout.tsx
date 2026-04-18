@@ -38,7 +38,7 @@ export default function ProjectsLayout({
               className="font-bold tracking-[0.2em] uppercase text-primary text-xs"
               style={{ fontFamily: "var(--font-orbitron, inherit)" }}
             >
-              ⬡ QEG
+              {t("title")}
             </Link>
             <Link
               href="/projects"

@@ -4,8 +4,15 @@ import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { extractPdfContent, isPdfFile } from "@/app/[locale]/(dashboard)/projects/[id]/_components/pdf-file-preview-extractor";
-import { extractDocxContent, isDocxFile } from "@/app/[locale]/(dashboard)/projects/[id]/_components/docx-file-preview-extractor";
+import {
+  extractPdfContent,
+  isPdfFile,
+} from "@/app/[locale]/(dashboard)/projects/[id]/_components/pdf-file-preview-extractor";
+import {
+  extractDocxContent,
+  isDocxFile,
+} from "@/app/[locale]/(dashboard)/projects/[id]/_components/docx-file-preview-extractor";
+import { useTranslations } from "next-intl";
 
 export function QuickUploadHero() {
   const router = useRouter();
@@ -13,6 +20,7 @@ export function QuickUploadHero() {
   const [isDragging, setIsDragging] = useState(false);
   const [status, setStatus] = useState<"idle" | "processing" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const t = useTranslations("QuickUploadHero");
 
   const handleFile = useCallback(
     async (file: File) => {
@@ -31,7 +39,8 @@ export function QuickUploadHero() {
           return;
         }
 
-        const title = file.name.replace(/\.[^/.]+$/, "").trim() || "Untitled Project";
+        const title =
+          file.name.replace(/\.[^/.]+$/, "").trim() || "Untitled Project";
 
         const { data: project, error: projectError } = await supabase
           .from("projects")
@@ -42,7 +51,10 @@ export function QuickUploadHero() {
         if (projectError) throw projectError;
 
         let extractedText = "";
-        let sourceFilePatch: Record<string, unknown> = { name: file.name, type: file.type };
+        let sourceFilePatch: Record<string, unknown> = {
+          name: file.name,
+          type: file.type,
+        };
 
         if (isPdfFile(file)) {
           extractedText = await extractPdfContent(file);
@@ -52,7 +64,7 @@ export function QuickUploadHero() {
           extractedText = result.extractedText;
           sourceFilePatch = { ...sourceFilePatch, fileType: "docx" };
         } else {
-          throw new Error("Unsupported file type. Please use a PDF or DOCX file.");
+          throw new Error(t("unsupportedType"));
         }
 
         const metadata = {
@@ -62,15 +74,18 @@ export function QuickUploadHero() {
           },
         };
 
-        await supabase.from("projects").update({ metadata }).eq("id", project.id);
+        await supabase
+          .from("projects")
+          .update({ metadata })
+          .eq("id", project.id);
 
         router.push(`/projects/${project.id}`);
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+        setErrorMsg(err instanceof Error ? err.message : t("errorGeneric"));
         setStatus("error");
       }
     },
-    [router],
+    [router, t],
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +117,7 @@ export function QuickUploadHero() {
     return (
       <div className="flex flex-col items-center gap-3 py-10 px-10 rounded-2xl border border-border/50 bg-background/30 backdrop-blur-sm w-full max-w-md">
         <Loader2 className="h-8 w-8 animate-spin text-foreground/50" />
-        <p className="text-sm text-foreground/60">Creating your project…</p>
+        <p className="text-sm text-foreground/60">{t("processing")}</p>
       </div>
     );
   }
@@ -111,7 +126,7 @@ export function QuickUploadHero() {
     <div
       role="button"
       tabIndex={0}
-      aria-label="Upload a file to create a project"
+      aria-label={t("ariaLabel")}
       className={`relative flex flex-col items-center justify-center gap-3 py-10 px-10 rounded-2xl border-2 border-dashed cursor-pointer transition-all w-full max-w-md outline-none focus-visible:ring-2 focus-visible:ring-ring ${
         isDragging
           ? "border-primary bg-primary/10"
@@ -131,12 +146,14 @@ export function QuickUploadHero() {
         onChange={handleChange}
         tabIndex={-1}
       />
-      <Upload className={`h-8 w-8 transition-colors ${isDragging ? "text-primary" : "text-foreground/40"}`} />
+      <Upload
+        className={`h-8 w-8 transition-colors ${isDragging ? "text-primary" : "text-foreground/40"}`}
+      />
       <div className="text-center">
         <p className="text-sm font-medium text-foreground/80">
-          {isDragging ? "Drop to create project" : "Drop a file or click to browse"}
+          {isDragging ? t("dropToCreate") : t("dropOrBrowse")}
         </p>
-        <p className="text-xs text-foreground/40 mt-1">PDF or DOCX — a project is created for you instantly</p>
+        <p className="text-xs text-foreground/40 mt-1">{t("fileHint")}</p>
       </div>
       {status === "error" && errorMsg && (
         <p className="text-xs text-destructive text-center mt-1">{errorMsg}</p>

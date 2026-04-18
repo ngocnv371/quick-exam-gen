@@ -1,4 +1,17 @@
 {
+  "Common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "error": "An error occurred. Please try again.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "next": "Next",
+    "previous": "Previous",
+    "pageInfo": "Page {page} of {totalPages}"
+  },
   "Error": {
     "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
     "title": "Something went wrong!"
@@ -10,6 +23,16 @@
   "NotFoundPage": {
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "title": "Page not found"
+  },
+  "QuickUploadHero": {
+    "processing": "Creating your project…",
+    "dropToCreate": "Drop to create project",
+    "dropOrBrowse": "Drop a file or click to browse",
+    "fileHint": "PDF or DOCX — a project is created for you instantly",
+    "unsupportedType": "Unsupported file type. Please use a PDF or DOCX file.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "loginRedirect": "You need to log in to create a project.",
+    "ariaLabel": "Upload a file to create a project"
   },
   "HomePage": {
     "title": "Quick Exam Gen!",
@@ -119,10 +142,12 @@
     "footerProjects": "Projects"
   },
   "Projects": {
+    "title": "My Projects",
     "noProjects": "No projects created yet. Start by creating a new project!",
     "createProject": "Create New Project"
   },
   "Menu": {
+    "title": "Quick Exam Gen",
     "home": "Home",
     "projects": "Projects",
     "billing": "Billing",
