@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { STATUS_BADGE, type ProjectStatus } from "../_lib/constants";
+import { useTranslations } from "next-intl";
 
 interface ProjectListItemProps {
   project: {
@@ -12,6 +13,7 @@ interface ProjectListItemProps {
 }
 
 export function ProjectListItem({ project }: ProjectListItemProps) {
+    const t = useTranslations("Projects.status");
   return (
     <Link
       key={project.id}
@@ -25,7 +27,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
         <Badge
           variant={STATUS_BADGE[project.status as ProjectStatus] ?? "secondary"}
         >
-          {project.status}
+          {t(project.status)}
         </Badge>
         <span className="text-xs text-foreground/40 tabular-nums">
           {new Date(project.updated_at).toLocaleDateString()}

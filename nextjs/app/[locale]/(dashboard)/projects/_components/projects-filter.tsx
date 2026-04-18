@@ -9,11 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { STATUS_OPTIONS } from "../_lib/constants";
+import { useTranslations } from "next-intl";
 
 export function ProjectsFilter({ currentStatus }: { currentStatus: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations("Projects.status");
 
   function handleStatusChange(value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -30,12 +32,12 @@ export function ProjectsFilter({ currentStatus }: { currentStatus: string }) {
   return (
     <Select value={currentStatus} onValueChange={handleStatusChange}>
       <SelectTrigger className="w-48">
-        <SelectValue placeholder="Filter by status" />
+        <SelectValue placeholder={t("all")} />
       </SelectTrigger>
       <SelectContent>
         {STATUS_OPTIONS.map((opt) => (
           <SelectItem key={opt.value} value={opt.value}>
-            {opt.label}
+            {t(opt.value)}
           </SelectItem>
         ))}
       </SelectContent>

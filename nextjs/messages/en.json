@@ -144,7 +144,18 @@
   "Projects": {
     "title": "My Projects",
     "noProjects": "No projects created yet. Start by creating a new project!",
-    "createProject": "Create New Project"
+    "createProject": "Create New Project",
+    "status": {
+      "draft": "Draft",
+      "extracting": "Extracting",
+      "generating": "Generating",
+      "ready": "Ready",
+      "done": "Done",
+      "all": "All",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed"
+    }
   },
   "Menu": {
     "title": "Quick Exam Gen",

@@ -142,7 +142,18 @@
   "Projects": {
     "title": "Đề Của Tôi",
     "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
-    "createProject": "Tạo Đề Mới"
+    "createProject": "Tạo Đề Mới",
+    "status": {
+      "draft": "Bản nháp",
+      "extracting": "Đang trích xuất",
+      "generating": "Đang tạo",
+      "ready": "Sẵn sàng",
+      "done": "Hoàn thành",
+      "all": "Tất cả",
+      "completed": "Đã hoàn thành",
+      "processing": "Đang xử lý",
+      "failed": "Thất bại"
+    }
   },
   "Menu": {
     "title": "Làm Đề Nhanh",
