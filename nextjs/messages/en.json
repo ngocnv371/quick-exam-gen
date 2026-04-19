@@ -10,6 +10,8 @@
     "approve": "Approve",
     "reject": "Reject",
     "noData": "No data found.",
+    "createdAt": "Created at {date}",
+    "updatedAt": "Updated at {date}",
     "save": "Save",
     "next": "Next",
     "previous": "Previous",
@@ -202,6 +204,7 @@
   },
   "Projects": {
     "title": "My Projects",
+    "detail": "Detail",
     "noProjects": "No projects created yet. Start by creating a new project!",
     "createProject": "Create New Project",
     "status": {

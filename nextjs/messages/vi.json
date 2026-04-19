@@ -12,6 +12,8 @@
     "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "next": "Tiếp",
     "previous": "Trước",
+    "createdAt": "Tạo lúc {date}",
+    "updatedAt": "Cập nhật lúc {date}",
     "pageInfo": "Trang {page} trên {totalPages}"
   },
   "Error": {
@@ -200,6 +202,7 @@
   },
   "Projects": {
     "title": "Đề Của Tôi",
+    "detail": "Chi tiết",
     "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
     "createProject": "Tạo Đề Mới",
     "status": {
