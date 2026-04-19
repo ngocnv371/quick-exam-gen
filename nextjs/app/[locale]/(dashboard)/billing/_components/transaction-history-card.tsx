@@ -24,7 +24,7 @@ export function TransactionHistoryCard({
   transactions: Transaction[];
 }) {
   const t = useTranslations("Billing");
-  const tType = useTranslations("Billing.txType");
+  const tType = useTranslations("Transactions.type");
   return (
     <Card className="border-border/60">
       <CardHeader className="pb-3">

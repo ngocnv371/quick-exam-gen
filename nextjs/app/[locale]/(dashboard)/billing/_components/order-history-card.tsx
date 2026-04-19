@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 
 export function OrderHistoryCard({ orders }: { orders: CoinOrderRow[] }) {
   const t = useTranslations("Billing");
-  const tStatus = useTranslations("Billing.orderStatus");
+  const tStatus = useTranslations("Orders.status");
 
   const statusColor: Record<string, string> = {
     pending: "text-amber-500",

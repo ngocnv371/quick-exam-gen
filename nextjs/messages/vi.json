@@ -5,6 +5,9 @@
     "delete": "Xóa",
     "edit": "Chỉnh sửa",
     "save": "Lưu",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "noData": "Không tìm thấy dữ liệu.",
     "loading": "Đang tải...",
     "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
     "next": "Tiếp",
@@ -144,6 +147,33 @@
     "description": "Duyệt và quản lý các đơn mua xu của người dùng.",
     "last100": "100 đơn mua xu gần nhất"
   },
+  "Orders": {
+    "table": {
+      "user": "Người dùng",
+      "coins": "Xu",
+      "package": "Gói",
+      "price": "Giá",
+      "createdAt": "Ngày tạo",
+      "actions": "Hành động"
+    },
+    "approvedToast": "Đơn đã được phê duyệt - xu đã được cộng vào tài khoản người dùng",
+    "rejectedToast": "Đơn bị từ chối",
+    "status": {
+      "label": "Trạng thái",
+      "all": "Tất cả",
+      "pending": "Chờ thanh toán",
+      "paid": "Đã thanh toán",
+      "fulfilled": "Hoàn tất",
+      "failed": "Thất bại",
+      "cancelled": "Đã hủy"
+    }
+  },
+  "Transactions": {
+    "type": {
+      "purchase": "Nạp xu",
+      "deduct": "Trừ xu"
+    }
+  },
   "Billing": {
     "TopUpPanel": {
       "title": "Nạp xu",
@@ -162,23 +192,11 @@
     "ordersDesc": "50 đơn nạp gần nhất",
     "ordersEmpty": "Chưa có đơn nào.",
     "coins": "xu",
-    "orderStatus": {
-      "all": "Tất cả",
-      "pending": "Chờ thanh toán",
-      "paid": "Đã thanh toán",
-      "fulfilled": "Hoàn tất",
-      "failed": "Thất bại",
-      "cancelled": "Đã hủy"
-    },
     "txTitle": "Lịch sử giao dịch",
     "txDesc": "100 giao dịch gần nhất",
     "txEmpty": "Chưa có giao dịch nào. Hãy tạo biến thể đề để xem lịch sử tại đây.",
     "txPurchase": "Nạp xu",
-    "txDeducted": "Trừ xu",
-    "txType": {
-      "purchase": "Nạp xu",
-      "deduct": "Trừ xu"
-    }
+    "txDeducted": "Trừ xu"
   },
   "Projects": {
     "title": "Đề Của Tôi",

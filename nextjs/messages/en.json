@@ -7,6 +7,9 @@
     "confirm": "Confirm",
     "delete": "Delete",
     "edit": "Edit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noData": "No data found.",
     "save": "Save",
     "next": "Next",
     "previous": "Previous",
@@ -146,6 +149,33 @@
     "description": "Manage users, projects, and billing for Quick Exam Gen.",
     "last100": "Last 100 orders"
   },
+  "Orders": {
+    "table": {
+      "user": "User",
+      "coins": "Coins",
+      "package": "Package",
+      "price": "Price",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "approvedToast": "Order approved - coins added to user's balance",
+    "rejectedToast": "Order rejected",
+    "status": {
+      "label": "Status",
+      "all": "All",
+      "pending": "Pending",
+      "paid": "Paid",
+      "fulfilled": "Fulfilled",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "Transactions": {
+    "type": {
+      "purchase": "Purchase",
+      "deduct": "Deduct"
+    }
+  },
   "Billing": {
     "TopUpPanel": {
       "title": "Top Up Coins",
@@ -164,23 +194,11 @@
     "ordersDesc": "Last 50 top-up orders",
     "ordersEmpty": "No orders yet.",
     "coins": "coins",
-    "orderStatus": {
-      "all": "All",
-      "pending": "Pending",
-      "paid": "Paid",
-      "fulfilled": "Fulfilled",
-      "failed": "Failed",
-      "cancelled": "Cancelled"
-    },
     "txTitle": "Transaction History",
     "txDesc": "Last 100 transactions",
     "txEmpty": "No transactions yet. Generate some exam variants to see your history here.",
     "txPurchase": "Coins purchased",
-    "txDeducted": "Coins deducted",
-    "txType": {
-      "purchase": "Purchase",
-      "deduct": "Deduct"
-    }
+    "txDeducted": "Coins deducted"
   },
   "Projects": {
     "title": "My Projects",

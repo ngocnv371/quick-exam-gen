@@ -67,7 +67,7 @@ async function OrdersContent({ status }: { status: StatusFilter }) {
 
 export default function AdminOrdersPage() {
   const t = useTranslations("Admin");
-  const tStatus = useTranslations("Billing.orderStatus");
+  const tStatus = useTranslations("Orders.status");
   const tabs = Object.values(StatusFilter);
 
   return (
