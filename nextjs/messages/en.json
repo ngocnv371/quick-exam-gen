@@ -141,6 +141,11 @@
     "footerSignup": "Sign up",
     "footerProjects": "Projects"
   },
+  "Admin": {
+    "title": "Admin Dashboard",
+    "description": "Manage users, projects, and billing for Quick Exam Gen.",
+    "last100": "Last 100 orders"
+  },
   "Billing": {
     "TopUpPanel": {
       "title": "Top Up Coins",
@@ -160,6 +165,7 @@
     "ordersEmpty": "No orders yet.",
     "coins": "coins",
     "orderStatus": {
+      "all": "All",
       "pending": "Pending",
       "paid": "Paid",
       "fulfilled": "Fulfilled",

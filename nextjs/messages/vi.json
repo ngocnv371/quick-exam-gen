@@ -139,6 +139,11 @@
     "footerSignup": "Đăng ký",
     "footerProjects": "Bài Tập"
   },
+  "Admin": {
+    "title": "Quản lý đơn hàng",
+    "description": "Duyệt và quản lý các đơn mua xu của người dùng.",
+    "last100": "100 đơn mua xu gần nhất"
+  },
   "Billing": {
     "TopUpPanel": {
       "title": "Nạp xu",
@@ -158,6 +163,7 @@
     "ordersEmpty": "Chưa có đơn nào.",
     "coins": "xu",
     "orderStatus": {
+      "all": "Tất cả",
       "pending": "Chờ thanh toán",
       "paid": "Đã thanh toán",
       "fulfilled": "Hoàn tất",

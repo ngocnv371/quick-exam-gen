@@ -11,19 +11,28 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { OrdersTable, type AdminOrderRow } from "./_components/orders-table";
 import type { CoinOrderRow } from "@/lib/billing";
+import { useTranslations } from "next-intl";
 
-type StatusFilter = "pending" | "all" | "fulfilled" | "failed" | "cancelled";
+enum StatusFilter {
+  Pending = "pending",
+  Fulfilled = "fulfilled",
+  Failed = "failed",
+  Cancelled = "cancelled",
+  All = "all",
+}
 
 async function OrdersContent({ status }: { status: StatusFilter }) {
   const admin = createAdminClient();
 
   const query = admin
     .from("coin_orders")
-    .select("id, user_id, package_id, status, coins, price_cents, currency, gateway, gateway_order_id, transaction_id, created_at, updated_at")
+    .select(
+      "id, user_id, package_id, status, coins, price_cents, currency, gateway, gateway_order_id, transaction_id, created_at, updated_at",
+    )
     .order("created_at", { ascending: false })
     .limit(100);
 
-  if (status !== "all") {
+  if (status !== StatusFilter.All) {
     query.eq("status", status);
   }
 
@@ -57,43 +66,37 @@ async function OrdersContent({ status }: { status: StatusFilter }) {
 }
 
 export default function AdminOrdersPage() {
-  // We read searchParams inside the async OrdersContent so the shell stays sync.
-  // For simplicity we default to pending and use tab links.
-  const tabs: { value: StatusFilter; label: string }[] = [
-    { value: "pending", label: "Pending" },
-    { value: "fulfilled", label: "Fulfilled" },
-    { value: "failed", label: "Failed" },
-    { value: "cancelled", label: "Cancelled" },
-    { value: "all", label: "All" },
-  ];
+  const t = useTranslations("Admin");
+  const tStatus = useTranslations("Billing.orderStatus");
+  const tabs = Object.values(StatusFilter);
 
   return (
     <div className="max-w-4xl mx-auto px-5 py-10 flex flex-col gap-6">
       <div>
         <h1 className="text-xl font-bold flex items-center gap-2">
           <ShoppingCart className="h-5 w-5" />
-          Order Management
+          {t("title")}
         </h1>
-        <p className="text-sm text-foreground/50 mt-1">
-          Approve or reject pending coin purchase orders.
-        </p>
+        <p className="text-sm text-foreground/50 mt-1">{t("description")}</p>
       </div>
 
       <Tabs defaultValue="pending">
         <TabsList>
           {tabs.map((t) => (
-            <TabsTrigger key={t.value} value={t.value}>
-              {t.label}
+            <TabsTrigger key={t} value={t}>
+              {tStatus(t)}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        {tabs.map((t) => (
-          <TabsContent key={t.value} value={t.value} className="mt-4">
+        {tabs.map((tab) => (
+          <TabsContent key={tab} value={tab} className="mt-4">
             <Card className="border-border/60">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base capitalize">{t.label} Orders</CardTitle>
-                <CardDescription>Last 100 orders</CardDescription>
+                <CardTitle className="text-base capitalize">
+                  {tStatus(tab)}
+                </CardTitle>
+                <CardDescription>{t("last100")}</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
                 <Suspense
@@ -103,7 +106,7 @@ export default function AdminOrdersPage() {
                     </div>
                   }
                 >
-                  <OrdersContent status={t.value} />
+                  <OrdersContent status={tab} />
                 </Suspense>
               </CardContent>
             </Card>
