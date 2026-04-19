@@ -142,6 +142,17 @@
     "footerProjects": "Projects"
   },
   "Billing": {
+    "TopUpPanel": {
+      "title": "Top Up Coins",
+      "desc": "Select a package and place your order. Coins will be credited once an admin approves your payment.",
+      "coins": "coins",
+      "placing": "Placing order…",
+      "buy": "Buy {coins} coins — {price}",
+      "orderPlaced": "Order placed for {coins} coins — awaiting admin approval.",
+      "orderFailed": "Order failed",
+      "topupFailed": "Top-up failed",
+      "unknownError": "Unknown error"
+    },
     "balanceLabel": "Coin Balance",
     "balanceHint": "Each exam variant generation costs 1 coin",
     "ordersTitle": "Purchase Orders",

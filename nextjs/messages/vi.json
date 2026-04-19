@@ -140,6 +140,17 @@
     "footerProjects": "Bài Tập"
   },
   "Billing": {
+    "TopUpPanel": {
+      "title": "Nạp xu",
+      "desc": "Chọn gói và đặt đơn. Xu sẽ được cộng sau khi admin xác nhận thanh toán.",
+      "coins": "xu",
+      "placing": "Đang đặt đơn…",
+      "buy": "Mua {coins} xu — {price}",
+      "orderPlaced": "Đã đặt đơn mua {coins} xu — chờ admin duyệt.",
+      "orderFailed": "Đặt đơn thất bại",
+      "topupFailed": "Nạp xu thất bại",
+      "unknownError": "Lỗi không xác định"
+    },
     "balanceLabel": "Số dư xu",
     "balanceHint": "Mỗi lần tạo biến thể đề thi tốn 1 xu",
     "ordersTitle": "Đơn mua xu",
