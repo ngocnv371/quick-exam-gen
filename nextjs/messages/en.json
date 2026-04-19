@@ -141,6 +141,30 @@
     "footerSignup": "Sign up",
     "footerProjects": "Projects"
   },
+  "Billing": {
+    "balanceLabel": "Coin Balance",
+    "balanceHint": "Each exam variant generation costs 1 coin",
+    "ordersTitle": "Purchase Orders",
+    "ordersDesc": "Last 50 top-up orders",
+    "ordersEmpty": "No orders yet.",
+    "coins": "coins",
+    "orderStatus": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "fulfilled": "Fulfilled",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    },
+    "txTitle": "Transaction History",
+    "txDesc": "Last 100 transactions",
+    "txEmpty": "No transactions yet. Generate some exam variants to see your history here.",
+    "txPurchase": "Coins purchased",
+    "txDeducted": "Coins deducted",
+    "txType": {
+      "purchase": "Purchase",
+      "deduct": "Deduct"
+    }
+  },
   "Projects": {
     "title": "My Projects",
     "noProjects": "No projects created yet. Start by creating a new project!",

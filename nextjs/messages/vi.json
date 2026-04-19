@@ -139,6 +139,30 @@
     "footerSignup": "Đăng ký",
     "footerProjects": "Bài Tập"
   },
+  "Billing": {
+    "balanceLabel": "Số dư xu",
+    "balanceHint": "Mỗi lần tạo biến thể đề thi tốn 1 xu",
+    "ordersTitle": "Đơn mua xu",
+    "ordersDesc": "50 đơn nạp gần nhất",
+    "ordersEmpty": "Chưa có đơn nào.",
+    "coins": "xu",
+    "orderStatus": {
+      "pending": "Chờ thanh toán",
+      "paid": "Đã thanh toán",
+      "fulfilled": "Hoàn tất",
+      "failed": "Thất bại",
+      "cancelled": "Đã hủy"
+    },
+    "txTitle": "Lịch sử giao dịch",
+    "txDesc": "100 giao dịch gần nhất",
+    "txEmpty": "Chưa có giao dịch nào. Hãy tạo biến thể đề để xem lịch sử tại đây.",
+    "txPurchase": "Nạp xu",
+    "txDeducted": "Trừ xu",
+    "txType": {
+      "purchase": "Nạp xu",
+      "deduct": "Trừ xu"
+    }
+  },
   "Projects": {
     "title": "Đề Của Tôi",
     "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
