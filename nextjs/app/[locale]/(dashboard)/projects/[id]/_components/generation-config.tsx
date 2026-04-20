@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getGenerationCost, getCoinsPerVariant, CONTENT_TIERS } from "@/lib/billing";
+import { useTranslations } from "next-intl";
 
 const VARIANT_COUNT_OPTIONS = [2, 4, 6] as const;
 
@@ -47,6 +48,7 @@ export function GenerationConfig({
   contentLength,
   onGenerate,
 }: GenerationConfigProps) {
+  const t = useTranslations("Projects");
   const coinsPerVariant = getCoinsPerVariant(contentLength);
   const cost = getGenerationCost(variantCount, contentLength);
   const tier = CONTENT_TIERS.find((t) => contentLength <= t.maxChars) ?? CONTENT_TIERS[CONTENT_TIERS.length - 1];
@@ -56,7 +58,7 @@ export function GenerationConfig({
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="target-language">Target language</Label>
+          <Label htmlFor="target-language">{t("targetLanguage")}</Label>
           <Select
             value={targetLanguage}
             onValueChange={setTargetLanguage}
@@ -76,7 +78,7 @@ export function GenerationConfig({
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="variant-count">Number of variants</Label>
+          <Label htmlFor="variant-count">{t("numberOfVariants")}</Label>
           <Select
             value={String(variantCount)}
             onValueChange={(v) => setVariantCount(Number(v) as 2 | 4 | 6)}
@@ -88,7 +90,7 @@ export function GenerationConfig({
             <SelectContent>
               {VARIANT_COUNT_OPTIONS.map((n) => (
                 <SelectItem key={n} value={String(n)}>
-                  {n} variants
+                  {t("variantCount", { count: n })}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -98,13 +100,13 @@ export function GenerationConfig({
 
       {!hasExtractedContent && (
         <p className="text-sm text-amber-600 dark:text-amber-400">
-          No extracted content yet. Upload and extract a file above before generating.
+          {t("noExtractedContent")}
         </p>
       )}
 
       {!hasEnoughCoins && (
         <p className="text-sm text-destructive">
-          Insufficient coins. You need {cost} coin(s) but have {balance ?? 0}.
+          {t("insufficientCoins", { cost, balance: balance ?? 0 })}
         </p>
       )}
 
@@ -117,21 +119,21 @@ export function GenerationConfig({
           {isGenerating ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Generating…
+              {t("generating")}
             </>
           ) : (
             <>
               <Sparkles className="h-4 w-4" />
-              Generate variants
+              {t("generateVariants")}
             </>
           )}
         </Button>
         <span className="flex items-center gap-1 text-xs text-foreground/50">
           <Coins className="h-3.5 w-3.5" />
-          Costs {cost} coin{cost !== 1 ? "s" : ""}
+          {t("cost", { cost, coin: cost !== 1 ? "coins" : "coin" })}
           {contentLength > 0 && (
             <span className="text-foreground/40">
-              &nbsp;&middot;&nbsp;{coinsPerVariant}/variant ({tier.label})
+              &nbsp;&middot;&nbsp;{t("costExplain", { coins: coinsPerVariant, tier: tier.label })}
             </span>
           )}
         </span>

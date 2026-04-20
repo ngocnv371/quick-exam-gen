@@ -4,6 +4,7 @@
     "confirm": "Xác nhận",
     "delete": "Xóa",
     "edit": "Chỉnh sửa",
+    "clear": "Xóa",
     "save": "Lưu",
     "approve": "Phê duyệt",
     "reject": "Từ chối",
@@ -14,6 +15,10 @@
     "previous": "Trước",
     "createdAt": "Tạo lúc {date}",
     "updatedAt": "Cập nhật lúc {date}",
+    "deleting": "Đang xóa…",
+    "yesDelete": "Có, xóa",
+    "areYouSure": "Bạn có chắc chắn?",
+    "saved": "Đã lưu",
     "pageInfo": "Trang {page} trên {totalPages}"
   },
   "Error": {
@@ -205,6 +210,23 @@
     "detail": "Chi tiết",
     "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
     "createProject": "Tạo Đề Mới",
+    "saveDescription": "Lưu mô tả",
+    "addDescription": "Thêm mô tả…",
+    "description": "Mô tả",
+    "extractedContent": "Nội dung đã trích xuất",
+    "extractedContentPlaceholder": "Nội dung đã trích xuất từ file sẽ hiển thị ở đây…",
+    "savingMetadata": "Đang lưu dữ liệu dự án…",
+    "autoSaving": "Đang tự động lưu…",
+    "autoSaved": "Đã tự động lưu",
+    "targetLanguage": "Ngôn ngữ đích",
+    "numberOfVariants": "Số lượng bản",
+    "variantCount": "{count} bản",
+    "noExtractedContent": "Chưa có nội dung nào được trích xuất. Tải lên và trích xuất file trước khi tạo biến thể.",
+    "insufficientCoins": "Không đủ xu. Bạn cần {cost} xu nhưng chỉ có {balance ?? 0}.",
+    "generating": "Đang tạo…",
+    "generateVariants": "Tạo bản biến thể",
+    "cost": "Tốn {cost} {coin}",
+    "costExplain": "{coins} xu mỗi bản ({tier})",
     "status": {
       "draft": "Bản nháp",
       "extracting": "Đang trích xuất",
@@ -216,6 +238,12 @@
       "processing": "Đang xử lý",
       "failed": "Thất bại"
     }
+  },
+  "Preview": {
+    "title": "Xem trước",
+    "noVisualPreview": "Không có bản xem trước trực quan nào được tạo cho file DOCX này.",
+    "source": "File nguồn",
+    "description": "Tải lên file PDF hoặc DOCX và xem trước nội dung đã trích xuất."
   },
   "Menu": {
     "title": "Làm Đề Nhanh",

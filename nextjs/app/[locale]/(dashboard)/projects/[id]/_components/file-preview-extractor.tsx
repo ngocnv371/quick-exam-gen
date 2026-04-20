@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { DocxPreview, extractDocxContent, isDocxFile } from "./docx-file-preview-extractor";
 import { extractPdfContent, isPdfFile, PdfPreview } from "./pdf-file-preview-extractor";
+import { useTranslations } from "next-intl";
 
 type SupportedFileType = "pdf" | "docx";
 type ProjectMetadata = Record<string, unknown>;
@@ -69,6 +70,8 @@ export function FilePreviewExtractor({
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [autoSaved, setAutoSaved] = useState(false);
   const [docxPreviewHtml, setDocxPreviewHtml] = useState<string | null>(null);
+  const t = useTranslations('Preview');
+  const tAll = useTranslations();
 
   const saveExtractedContentToMetadata = useCallback(async (
     text: string,
@@ -248,9 +251,9 @@ export function FilePreviewExtractor({
       <CardHeader className="pb-4">
         <CardTitle className="text-base flex items-center gap-2">
           <Upload className="h-4 w-4" />
-          Source File
+          {t("source")}
         </CardTitle>
-        <CardDescription>Upload a PDF or DOCX and review preview + extracted content.</CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-5">
@@ -271,7 +274,7 @@ export function FilePreviewExtractor({
             className="shrink-0"
           >
             <RefreshCw className="h-4 w-4" />
-            Clear
+            {tAll('Common.clear')}
           </Button>
         </div>
 
@@ -287,7 +290,7 @@ export function FilePreviewExtractor({
         {isProcessing ? (
           <div className="rounded-lg border border-border/50 bg-muted/30 px-4 py-6 text-sm text-foreground/70 flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
-            Extracting content from file...
+            {t("processing")}...
           </div>
         ) : null}
 
@@ -295,7 +298,7 @@ export function FilePreviewExtractor({
         {!isProcessing && !error && selectedType === "docx" ? <DocxPreview previewHtml={docxPreviewHtml} /> : null}
 
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">Extracted content</h3>
+          <h3 className="text-sm font-medium">{tAll("Projects.extractedContent")}</h3>
           <Textarea
             value={extractedText}
             onChange={(e) => {
@@ -303,21 +306,21 @@ export function FilePreviewExtractor({
               setAutoSaved(false);
               setAutoSaveError(null);
             }}
-            placeholder="Extracted text from the file will appear here..."
+            placeholder={tAll("Projects.extractedContentPlaceholder")}
             className="min-h-[220px] bg-background"
           />
         </div>
 
         <div className="text-xs">
-          {isAutoSaving ? <span className="text-foreground/60">Auto-saving...</span> : null}
-          {!isAutoSaving && autoSaved ? <span className="text-foreground/60">Auto-saved</span> : null}
+          {isAutoSaving ? <span className="text-foreground/60">{tAll("Projects.autoSaving")}</span> : null}
+          {!isAutoSaving && autoSaved ? <span className="text-foreground/60">{tAll("Projects.autoSaved")}</span> : null}
           {!isAutoSaving && autoSaveError ? <span className="text-destructive">{autoSaveError}</span> : null}
         </div>
 
         {isSavingMetadata ? (
           <div className="rounded-lg border border-border/50 bg-muted/30 px-4 py-3 text-sm text-foreground/70 flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
-            Saving extracted content to metadata...
+            {tAll("Projects.savingMetadata")}
           </div>
         ) : null}
 

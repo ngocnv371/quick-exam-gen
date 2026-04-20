@@ -28,18 +28,18 @@ function ProjectHeader({
   updated_at: string;
   created_at: string;
 }) {
-  const t = useTranslations("Common");
+  const t = useTranslations();
   return (
     <div className="flex flex-col gap-2">
       <ProjectTitleEditor id={projectId} initialTitle={title} />
       <div className="flex items-center gap-3 flex-wrap">
         <ProjectStatusEditor id={projectId} initialStatus={status} />
-        <Badge variant={STATUS_BADGE[status] ?? "secondary"}>{status}</Badge>
+        <Badge variant={STATUS_BADGE[status] ?? "secondary"}>{t(`Projects.status.${status}`)}</Badge>
         <span className="text-xs text-foreground/50">
-          {t("updatedAt", { date: new Date(updated_at).toLocaleDateString() })}
+          {t("Common.updatedAt", { date: new Date(updated_at).toLocaleDateString() })}
         </span>
         <span className="text-xs text-foreground/50">
-          {t("createdAt", { date: new Date(created_at).toLocaleDateString() })}
+          {t("Common.createdAt", { date: new Date(created_at).toLocaleDateString() })}
         </span>
       </div>
     </div>

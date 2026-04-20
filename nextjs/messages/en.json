@@ -5,6 +5,7 @@
     "error": "An error occurred. Please try again.",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "clear": "Clear",
     "delete": "Delete",
     "edit": "Edit",
     "approve": "Approve",
@@ -12,6 +13,10 @@
     "noData": "No data found.",
     "createdAt": "Created at {date}",
     "updatedAt": "Updated at {date}",
+    "deleting": "Deleting…",
+    "yesDelete": "Yes, delete",
+    "areYouSure": "Are you sure?",
+    "saved": "Saved",
     "save": "Save",
     "next": "Next",
     "previous": "Previous",
@@ -19,7 +24,8 @@
   },
   "Error": {
     "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
-    "title": "Something went wrong!"
+    "title": "Something went wrong!",
+    "failedToSave": "Could not save changes. Please try again."
   },
   "LocaleSwitcher": {
     "label": "Change language",
@@ -207,6 +213,23 @@
     "detail": "Detail",
     "noProjects": "No projects created yet. Start by creating a new project!",
     "createProject": "Create New Project",
+    "saveDescription": "Save description",
+    "addDescription": "Add a description…",
+    "extractedContent": "Extracted content",
+    "extractedContentPlaceholder": "Extracted text from the file will appear here…",
+    "savingMetadata": "Saving project data…",
+    "autoSaving": "Auto-saving…",
+    "autoSaved": "Auto-saved",
+    "description": "Description",
+    "targetLanguage": "Target language",
+    "numberOfVariants": "Number of variants",
+    "variantCount": "{count} variants",
+    "noExtractedContent": "No extracted content yet. Upload and extract a file above before generating.",
+    "insufficientCoins": "Insufficient coins. You need {cost} coin(s) but have {balance ?? 0}.",
+    "generating": "Generating…",
+    "generateVariants": "Generate variants",
+    "cost": "Costs {cost} {coin}",
+    "costExplain": "{coins} per variant ({tier})",
     "status": {
       "draft": "Draft",
       "extracting": "Extracting",
@@ -218,6 +241,12 @@
       "completed": "Completed",
       "failed": "Failed"
     }
+  },
+  "Preview": {
+    "title": "Preview",
+    "noVisualPreview": "No visual preview was generated for this DOCX file.",
+    "source": "Source File",
+    "description": "Upload a PDF or DOCX and review preview + extracted content."
   },
   "Menu": {
     "title": "Quick Exam Gen",

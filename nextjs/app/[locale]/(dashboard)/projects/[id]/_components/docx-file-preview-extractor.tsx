@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 type MammothLike = {
   extractRawText: (input: { arrayBuffer: ArrayBuffer }) => Promise<{ value: string }>;
   convertToHtml: (input: { arrayBuffer: ArrayBuffer }) => Promise<{ value: string }>;
@@ -37,12 +39,13 @@ export async function extractDocxContent(file: File): Promise<{ extractedText: s
 }
 
 export function DocxPreview({ previewHtml }: { previewHtml: string | null }) {
+  const t = useTranslations('Preview');
   if (!previewHtml) {
     return (
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Preview</h3>
+        <h3 className="text-sm font-medium">{t("title")}</h3>
         <div className="rounded-lg border border-border/50 bg-background p-4 max-h-[480px] overflow-auto">
-          <p className="text-sm text-foreground/60">No visual preview was generated for this DOCX file.</p>
+          <p className="text-sm text-foreground/60">{t("noVisualPreview")}</p>
         </div>
       </div>
     );
@@ -50,7 +53,7 @@ export function DocxPreview({ previewHtml }: { previewHtml: string | null }) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium">Preview</h3>
+      <h3 className="text-sm font-medium">{t("title")}</h3>
       <div className="rounded-lg border border-border/50 bg-background p-4 max-h-[480px] overflow-auto">
         <div className="prose prose-sm max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: previewHtml }} />
       </div>

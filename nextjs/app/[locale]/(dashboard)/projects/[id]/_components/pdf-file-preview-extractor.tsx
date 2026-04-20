@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 type PdfTextItem = { str?: string };
@@ -58,6 +59,7 @@ export async function extractPdfContent(file: File): Promise<string> {
 
 export function PdfPreview({ selectedFile }: { selectedFile: File | null }) {
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
+  const t = useTranslations('Preview');
 
   useEffect(() => {
     if (!selectedFile || !isPdfFile(selectedFile)) {
@@ -77,7 +79,7 @@ export function PdfPreview({ selectedFile }: { selectedFile: File | null }) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium">Preview</h3>
+      <h3 className="text-sm font-medium">{t("title")}</h3>
       <div className="rounded-lg border border-border/50 bg-background overflow-hidden h-[480px]">
         <iframe title="PDF preview" src={pdfPreviewUrl} className="h-full w-full" />
       </div>

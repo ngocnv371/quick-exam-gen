@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProjectStatus, VALID_STATUSES } from "../../_lib/constants";
+import { useTranslations } from "next-intl";
 
 export function ProjectTitleEditor({
   id,
@@ -28,6 +29,7 @@ export function ProjectTitleEditor({
   const [title, setTitle] = useState(initialTitle);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations();
 
   async function save() {
     if (!title.trim() || title.trim() === initialTitle) {
@@ -45,11 +47,11 @@ export function ProjectTitleEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
-      toast.error("Could not save title", { description: dbError.message });
+      toast.error(t("Error.failedToSave"), { description: dbError.message });
       return;
     }
     setEditing(false);
-    toast.success("Title saved");
+    toast.success(t("Common.saved"));
     router.refresh();
   }
 
@@ -81,7 +83,7 @@ export function ProjectTitleEditor({
           className="text-xl font-bold h-9"
         />
         <Button type="submit" size="sm" disabled={saving || !title.trim()}>
-          Save
+          {t("Common.save")}
         </Button>
         <Button
           type="button"
@@ -94,7 +96,7 @@ export function ProjectTitleEditor({
             setError(null);
           }}
         >
-          Cancel
+          {t("Common.cancel")}
         </Button>
       </form>
       {error && <p className="text-xs text-destructive">{error}</p>}
@@ -112,6 +114,7 @@ export function ProjectStatusEditor({
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations();
 
   async function handleChange(value: string) {
     setSaving(true);
@@ -124,10 +127,10 @@ export function ProjectStatusEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
-      toast.error("Could not save status", { description: dbError.message });
+      toast.error(t("Error.failedToSave"), { description: dbError.message });
       return;
     }
-    toast.success("Status saved");
+    toast.success(t("Common.saved"));
     router.refresh();
   }
 
@@ -140,7 +143,7 @@ export function ProjectStatusEditor({
         <SelectContent>
           {VALID_STATUSES.map((s) => (
             <SelectItem key={s} value={s}>
-              {s}
+              {t(`Projects.status.${s}`)}
             </SelectItem>
           ))}
         </SelectContent>
@@ -164,6 +167,7 @@ export function ProjectDescriptionEditor({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations();
 
   async function save() {
     setSaving(true);
@@ -176,25 +180,25 @@ export function ProjectDescriptionEditor({
     setSaving(false);
     if (dbError) {
       setError(dbError.message);
-      toast.error("Could not save description", { description: dbError.message });
+      toast.error(t("Error.failedToSave"), { description: dbError.message });
       return;
     }
     setSaved(true);
-    toast.success("Description saved");
+    toast.success(t("Common.saved"));
     router.refresh();
     setTimeout(() => setSaved(false), 2000);
   }
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium">Description</label>
+      <label className="text-sm font-medium">{t("Projects.description")}</label>
       <Textarea
         value={description}
         onChange={(e) => {
           setDescription(e.target.value);
           setSaved(false);
         }}
-        placeholder="Add a description…"
+        placeholder={t("Projects.addDescription")}
         disabled={saving}
         rows={4}
       />
@@ -204,9 +208,9 @@ export function ProjectDescriptionEditor({
           onClick={save}
           disabled={saving || description.trim() === initialDescription.trim()}
         >
-          {saving ? "Saving…" : "Save description"}
+          {saving ? t("Common.saving") : t("Projects.saveDescription")}
         </Button>
-        {saved && <span className="text-xs text-foreground/50">Saved</span>}
+        {saved && <span className="text-xs text-foreground/50">{t("Common.saved")}</span>}
         {error && <span className="text-xs text-destructive">{error}</span>}
       </div>
     </div>
@@ -218,6 +222,7 @@ export function DeleteProjectButton({ id }: { id: string }) {
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations();
 
   async function handleDelete() {
     setDeleting(true);
@@ -235,7 +240,7 @@ export function DeleteProjectButton({ id }: { id: string }) {
   if (!confirming) {
     return (
       <Button variant="destructive" size="sm" onClick={() => setConfirming(true)}>
-        Delete Project
+        {t("Common.delete")}
       </Button>
     );
   }
@@ -243,9 +248,9 @@ export function DeleteProjectButton({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-1 items-end">
       <div className="flex items-center gap-2">
-        <span className="text-sm text-foreground/70">Are you sure?</span>
+        <span className="text-sm text-foreground/70">{t("Common.areYouSure")}</span>
         <Button variant="destructive" size="sm" disabled={deleting} onClick={handleDelete}>
-          {deleting ? "Deleting..." : "Yes, delete"}
+          {deleting ? t("Common.deleting") : t("Common.yesDelete")}
         </Button>
         <Button
           variant="outline"
@@ -256,7 +261,7 @@ export function DeleteProjectButton({ id }: { id: string }) {
             setError(null);
           }}
         >
-          Cancel
+          {t("Common.cancel")}
         </Button>
       </div>
       {error && <p className="text-xs text-destructive">{error}</p>}
