@@ -45,7 +45,7 @@
   },
   "HomePage": {
     "title": "Làm Đề Nhanh!",
-    "projects": "Bài Tập",
+    "projects": "Đề Bài",
     "aiHero": "Tạo đề thi bằng AI",
     "heroTitle": "Biến mọi tài liệu thành câu hỏi sẵn sàng cho đề thi",
     "heroSubtitle": "Tải lên file PDF hoặc Word, để AI trích xuất ý chính và tạo ngân hàng câu hỏi với nhiều biến thể chỉ trong 60 giây.",
@@ -70,7 +70,7 @@
       {
         "icon": "users",
         "title": "Trung tâm luyện thi",
-        "description": "Tạo bộ đề luyện tập cá nhân hóa cho từng học viên từ một tài liệu nguồn. Nhiều bài tập, ít thời gian chuẩn bị."
+        "description": "Tạo bộ đề luyện tập cá nhân hóa cho từng học viên từ một tài liệu nguồn. Nhiều đề bài, ít thời gian chuẩn bị."
       },
       {
         "icon": "graduation-cap",
@@ -147,7 +147,7 @@
     "footerCopyright": "© {year} Làm Đề Nhanh. Đã đăng ký bản quyền.",
     "footerLogin": "Đăng nhập",
     "footerSignup": "Đăng ký",
-    "footerProjects": "Bài Tập"
+    "footerProjects": "Đề Bài"
   },
   "Admin": {
     "title": "Quản lý đơn hàng",
@@ -253,7 +253,7 @@
     "admin": "Quản Trị"
   },
   "Metadata": {
-    "title": "Làm Đề Nhanh - Tạo Bài Tập Trực Tuyến Dễ Dàng",
-    "description": "Làm Đề Nhanh là công cụ tạo bài tập trực tuyến giúp giáo viên và học sinh tạo ra các bài tập chất lượng cao một cách nhanh chóng và dễ dàng."
+    "title": "Làm Đề Nhanh - Tạo Đề Bài Trực Tuyến Dễ Dàng",
+    "description": "Làm Đề Nhanh là công cụ tạo đề bài trực tuyến giúp giáo viên và học sinh tạo ra các đề bài chất lượng cao một cách nhanh chóng và dễ dàng."
   }
 }
