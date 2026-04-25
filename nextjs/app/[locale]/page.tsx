@@ -170,7 +170,7 @@ export default function Home({params}: PageProps<'/[locale]'>) {
                 className="break-inside-avoid rounded-xl border border-border bg-card p-5 flex flex-col gap-3"
               >
                 <div className="flex gap-0.5">
-                  {Array.from({ length: stars }).map((_, i) => (
+                  {Array.from({ length: +stars }).map((_, i) => (
                     <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
