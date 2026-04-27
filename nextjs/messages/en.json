@@ -227,6 +227,15 @@
     "errorGeneric": "An error occurred. Please try again."
   },
   "Projects": {
+    "new": {
+      "title": "New Project",
+      "description": "Give your project a name to get started.",
+      "projectName": "Project name",
+      "placeholder": "e.g. Midterm Exam 2026",
+      "cancel": "Cancel",
+      "create": "Create Project",
+      "creating": "Creating..."
+    },
     "title": "My Projects",
     "detail": "Detail",
     "noProjects": "No projects created yet. Start by creating a new project!",
@@ -244,6 +253,7 @@
     "variantCount": "{count} variants",
     "noExtractedContent": "No extracted content yet. Upload and extract a file above before generating.",
     "insufficientCoins": "Insufficient coins. You need {cost} coin(s) but have {balance ?? 0}.",
+    "topUp": "Top Up Coins",
     "generating": "Generating…",
     "generateVariants": "Generate variants",
     "cost": "Costs {cost} {coin}",

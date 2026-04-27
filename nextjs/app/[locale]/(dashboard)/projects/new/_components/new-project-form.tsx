@@ -14,12 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
 
 export function NewProjectForm({ userId }: { userId: string }) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("Projects");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,7 +33,7 @@ export function NewProjectForm({ userId }: { userId: string }) {
 
       const { data, error } = await supabase
         .from("projects")
-        .insert({ title: title.trim(), user_id: userId })
+        .insert({ title: title.trim(), user_id: userId, type: "exam" })
         .select("id")
         .single();
 
@@ -48,16 +50,16 @@ export function NewProjectForm({ userId }: { userId: string }) {
     <div className="flex items-center justify-center min-h-screen p-8">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>New Project</CardTitle>
-          <CardDescription>Give your project a name to get started.</CardDescription>
+          <CardTitle>{t("new.title")}</CardTitle>
+          <CardDescription>{t("new.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="title">Project name</Label>
+              <Label htmlFor="title">{t("new.projectName")}</Label>
               <Input
                 id="title"
-                placeholder="e.g. Midterm Exam 2026"
+                placeholder={t("new.placeholder")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -70,10 +72,10 @@ export function NewProjectForm({ userId }: { userId: string }) {
 
             <div className="flex gap-2 justify-end">
               <Button asChild variant="outline" disabled={isLoading}>
-                <Link href="/projects">Cancel</Link>
+                <Link href="/projects">{t("new.cancel")}</Link>
               </Button>
               <Button type="submit" disabled={isLoading || !title.trim()}>
-                {isLoading ? "Creating..." : "Create Project"}
+                {isLoading ? t("new.creating") : t("new.create")}
               </Button>
             </div>
           </form>

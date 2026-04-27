@@ -224,6 +224,15 @@
     "errorGeneric": "Đã xảy ra lỗi. Vui lòng thử lại."
   },
   "Projects": {
+    "new": {
+      "title": "Tạo Đề Mới",
+      "description": "Đặt tên cho đề để bắt đầu.",
+      "projectName": "Tên đề",
+      "placeholder": "VD: Đề giữa kỳ 2026",
+      "cancel": "Hủy",
+      "create": "Tạo Đề",
+      "creating": "Đang tạo..."
+    },
     "title": "Đề Của Tôi",
     "detail": "Chi tiết",
     "noProjects": "Chưa có đề nào được tạo. Bắt đầu bằng cách tạo một đề mới!",
@@ -240,7 +249,8 @@
     "numberOfVariants": "Số lượng bản",
     "variantCount": "{count} bản",
     "noExtractedContent": "Chưa có nội dung nào được trích xuất. Tải lên và trích xuất file trước khi tạo biến thể.",
-    "insufficientCoins": "Không đủ xu. Bạn cần {cost} xu nhưng chỉ có {balance ?? 0}.",
+    "insufficientCoins": "Không đủ xu. Bạn cần {cost} xu nhưng chỉ có {balance}.",
+    "topUp": "Nạp thêm xu",
     "generating": "Đang tạo…",
     "generateVariants": "Tạo bản biến thể",
     "cost": "Tốn {cost} {coin}",

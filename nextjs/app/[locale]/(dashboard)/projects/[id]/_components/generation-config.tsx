@@ -10,8 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getGenerationCost, getCoinsPerVariant, CONTENT_TIERS } from "@/lib/billing";
+import {
+  getGenerationCost,
+  getCoinsPerVariant,
+  CONTENT_TIERS,
+} from "@/lib/billing";
 import { useTranslations } from "next-intl";
+import NavigationLink from "@/components/NavigationLink";
 
 const VARIANT_COUNT_OPTIONS = [2, 4, 6] as const;
 
@@ -51,7 +56,9 @@ export function GenerationConfig({
   const t = useTranslations("Projects");
   const coinsPerVariant = getCoinsPerVariant(contentLength);
   const cost = getGenerationCost(variantCount, contentLength);
-  const tier = CONTENT_TIERS.find((t) => contentLength <= t.maxChars) ?? CONTENT_TIERS[CONTENT_TIERS.length - 1];
+  const tier =
+    CONTENT_TIERS.find((t) => contentLength <= t.maxChars) ??
+    CONTENT_TIERS[CONTENT_TIERS.length - 1];
   const hasEnoughCoins = balance === null || balance >= cost;
 
   return (
@@ -105,9 +112,14 @@ export function GenerationConfig({
       )}
 
       {!hasEnoughCoins && (
-        <p className="text-sm text-destructive">
-          {t("insufficientCoins", { cost, balance: balance ?? 0 })}
-        </p>
+        <>
+          <p className="text-sm text-destructive">
+            {t("insufficientCoins", { cost, balance: balance ?? 0 })}
+          </p>
+          <NavigationLink href="/billing" className="ml-1 underline">
+            {t("topUp")}
+          </NavigationLink>
+        </>
       )}
 
       <div className="flex items-center gap-3 flex-wrap">
@@ -133,7 +145,8 @@ export function GenerationConfig({
           {t("cost", { cost, coin: cost !== 1 ? "coins" : "coin" })}
           {contentLength > 0 && (
             <span className="text-foreground/40">
-              &nbsp;&middot;&nbsp;{t("costExplain", { coins: coinsPerVariant, tier: tier.label })}
+              &nbsp;&middot;&nbsp;
+              {t("costExplain", { coins: coinsPerVariant, tier: tier.label })}
             </span>
           )}
         </span>
