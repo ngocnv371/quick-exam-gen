@@ -205,6 +205,24 @@
     "txPurchase": "Nạp xu",
     "txDeducted": "Trừ xu"
   },
+  "Auth": {
+    "loginTitle": "Đăng Nhập",
+    "loginDescription": "Nhập email của bạn bên dưới để đăng nhập vào tài khoản của bạn",
+    "emailLabel": "Email",
+    "emailPlaceholder": "m@example.com",
+    "passwordLabel": "Mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "loggingIn": "Đang đăng nhập...",
+    "loginButton": "Đăng nhập",
+    "noAccount": "Chưa có tài khoản?",
+    "signUp": "Đăng ký",
+    "signUpDescription": "Tạo tài khoản mới",
+    "repeatPasswordLabel": "Nhập lại mật khẩu",
+    "passwordsNoMatch": "Mật khẩu không khớp",
+    "creatingAccount": "Đang tạo tài khoản...",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "errorGeneric": "Đã xảy ra lỗi. Vui lòng thử lại."
+  },
   "Projects": {
     "title": "Đề Của Tôi",
     "detail": "Chi tiết",

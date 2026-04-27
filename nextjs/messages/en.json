@@ -208,6 +208,24 @@
     "txPurchase": "Coins purchased",
     "txDeducted": "Coins deducted"
   },
+  "Auth": {
+    "loginTitle": "Login",
+    "loginDescription": "Enter your email below to login to your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "m@example.com",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot your password?",
+    "loggingIn": "Logging in...",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "signUpDescription": "Create a new account",
+    "repeatPasswordLabel": "Repeat Password",
+    "passwordsNoMatch": "Passwords do not match",
+    "creatingAccount": "Creating an account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "errorGeneric": "An error occurred. Please try again."
+  },
   "Projects": {
     "title": "My Projects",
     "detail": "Detail",
