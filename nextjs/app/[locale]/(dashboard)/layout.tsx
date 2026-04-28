@@ -5,6 +5,28 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Suspense } from "react";
+import { getProfileRole } from "@/lib/admin";
+
+function AdminItems() {
+  const t = useTranslations("Menu");
+  return (
+    <>
+      <Link
+        href="/admin/orders"
+        className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
+      >
+        {t("admin")}
+      </Link>
+    </>
+  );
+}
+
+async function AdminContainer() {
+  const role = await getProfileRole();
+
+  if (role !== "admin") return null;
+  return <AdminItems />;
+}
 
 export default function ProjectsLayout({
   children,
@@ -52,12 +74,7 @@ export default function ProjectsLayout({
             >
               {t("billing")}
             </Link>
-            <Link
-              href="/admin/orders"
-              className="text-foreground/50 hover:text-primary transition-colors tracking-wide text-xs uppercase"
-            >
-              {t("admin")}
-            </Link>
+            <AdminContainer />
             <LocaleSwitcher />
           </div>
           <div className="flex items-center gap-3">
