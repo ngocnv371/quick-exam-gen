@@ -1,6 +1,290 @@
 {
+  "Common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "error": "An error occurred. Please try again.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "clear": "Clear",
+    "delete": "Delete",
+    "edit": "Edit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noData": "No data found.",
+    "createdAt": "Created at {date}",
+    "updatedAt": "Updated at {date}",
+    "deleting": "Deleting…",
+    "yesDelete": "Yes, delete",
+    "areYouSure": "Are you sure?",
+    "saved": "Saved",
+    "save": "Save",
+    "next": "Next",
+    "previous": "Previous",
+    "pageInfo": "Page {page} of {totalPages}"
+  },
+  "Error": {
+    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "title": "Something went wrong!",
+    "failedToSave": "Could not save changes. Please try again."
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, vi {Tiếng Việt} en {English} other {Unknown}}"
+  },
+  "NotFoundPage": {
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "title": "Page not found"
+  },
+  "QuickUploadHero": {
+    "processing": "Creating your project…",
+    "dropToCreate": "Drop to create project",
+    "dropOrBrowse": "Drop a file or click to browse",
+    "fileHint": "PDF or DOCX — a project is created for you instantly",
+    "unsupportedType": "Unsupported file type. Please use a PDF or DOCX file.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "loginRedirect": "You need to log in to create a project.",
+    "ariaLabel": "Upload a file to create a project"
+  },
   "HomePage": {
     "title": "Quick Exam Gen!",
-    "projects": "Projects"
+    "projects": "Projects",
+    "aiHero": "AI-powered exam generation",
+    "heroTitle": "Turn any document into exam-ready questions",
+    "heroSubtitle": "Upload a PDF or Word file, let AI extract the key concepts, and get a full question bank with multiple variants — in under 60 seconds.",
+    "createProject": "Create project manually",
+    "viewProjects": "View all projects",
+    "socialEducators": "2,400+ educators",
+    "socialRating": "4.9 average rating",
+    "socialSpeed": "Avg. 47 seconds per exam",
+    "useCasesTitle": "Who uses Quick Exam Gen?",
+    "useCasesSubtitle": "Whether you teach a class of 30 or train a team of 3,000, we've got you covered.",
+    "useCases": [
+      {
+        "icon": "book-open",
+        "title": "Teachers & Educators",
+        "description": "Turn your lecture notes or textbook chapters into polished, ready-to-print exams in seconds. Stop spending evenings writing questions by hand."
+      },
+      {
+        "icon": "building-2",
+        "title": "Schools & Institutions",
+        "description": "Standardize exam quality across departments. Generate multiple variants of the same test to prevent cheating without extra effort."
+      },
+      {
+        "icon": "users",
+        "title": "Tutoring Centers",
+        "description": "Create personalized practice sets for every student from a single source document. More practice, less prep time."
+      },
+      {
+        "icon": "graduation-cap",
+        "title": "Self-Learners",
+        "description": "Upload your study material and instantly get quiz questions to test yourself. Active recall made effortless."
+      },
+      {
+        "icon": "flask-conical",
+
+        "title": "Corporate Trainers",
+        "description": "Convert training manuals and SOPs into assessment quizzes. Verify employee knowledge without hiring a content team."
+      },
+      {
+        "icon": "zap",
+        "title": "Hackathon & Event Hosts",
+        "description": "Need a trivia round or knowledge check in 5 minutes? Drop in any document and get a full question set instantly."
+      }
+    ],
+    "howItWorksTitle": "How it works",
+    "howItWorks": [
+      {
+        "step": "01",
+        "title": "Upload your document",
+        "body": "Drag-and-drop a PDF or Word file — lecture notes, textbooks, training manuals, anything."
+      },
+      {
+        "step": "02",
+        "title": "AI extracts the knowledge",
+        "body": "Our AI reads the content, identifies key concepts, and generates high-quality questions automatically."
+      },
+      {
+        "step": "03",
+        "title": "Export & share instantly",
+        "body": "Download a print-ready exam with multiple variants, or share a link with your students right away."
+      }
+    ],
+    "testimonialsTitle": "Loved by educators worldwide",
+    "testimonialsSubtitle": "Thousands of teachers, trainers, and learners save hours every week with Quick Exam Gen.",
+    "testimonials": [
+      {
+        "name": "Nguyen Thi Lan",
+        "role": "High School Biology Teacher",
+        "quote": "I used to spend 3-4 hours writing each exam. Now I upload my chapter notes and have a full question bank in under a minute. The quality genuinely surprised me."
+      },
+      {
+        "name": "Marcus Webb",
+        "role": "Corporate L&D Manager",
+        "quote": "We rolled out 12 compliance quizzes last quarter using Quick Exam Gen. Our team saved roughly 40 hours of content work. I don't know why we didn't find this sooner."
+      },
+      {
+        "name": "Dr. Priya Sharma",
+        "role": "University Lecturer, Computer Science",
+        "quote": "Generating exam variants is a game-changer for large cohorts. Each student gets a slightly different paper but the same learning objectives. Zero extra effort on my end."
+      },
+      {
+        "name": "Tomás Reyes",
+        "role": "Founder, TutorHive",
+        "quote": "Our tutors use it daily to build practice sets for students. The drag-and-drop upload is fast, the questions are accurate, and the export is clean. Solid product."
+      },
+      {
+        "name": "Aiko Tanaka",
+        "role": "Competitive Exam Coach",
+        "quote": "I coach students for national entrance exams. Being able to generate hundreds of practice questions from past papers in minutes is absolutely invaluable."
+      },
+      {
+        "name": "Emily Chen",
+        "role": "Self-Learner & Med Student",
+        "quote": "I upload my lecture slides and get a self-quiz instantly. It helped me actually retain information instead of just re-reading the same slides over and over."
+      }
+    ],
+    "finalCtaTitle": "Ready to save hours every week?",
+    "finalCtaSubtitle": "Join thousands of educators who've ditched manual exam writing. Your first exam is free — no credit card required.",
+    "getStarted": "Get started for free",
+    "noCreditCard": "No credit card required · Cancel anytime",
+    "footerCopyright": "© {year} Quick Exam Gen. All rights reserved.",
+    "footerLogin": "Log in",
+    "footerSignup": "Sign up",
+    "footerProjects": "Projects"
+  },
+  "Admin": {
+    "title": "Admin Dashboard",
+    "description": "Manage users, projects, and billing for Quick Exam Gen.",
+    "last100": "Last 100 orders"
+  },
+  "Orders": {
+    "table": {
+      "user": "User",
+      "coins": "Coins",
+      "package": "Package",
+      "price": "Price",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "approvedToast": "Order approved - coins added to user's balance",
+    "rejectedToast": "Order rejected",
+    "status": {
+      "label": "Status",
+      "all": "All",
+      "pending": "Pending",
+      "paid": "Paid",
+      "fulfilled": "Fulfilled",
+      "failed": "Failed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "Transactions": {
+    "type": {
+      "purchase": "Purchase",
+      "deduct": "Deduct"
+    }
+  },
+  "Billing": {
+    "TopUpPanel": {
+      "title": "Top Up Coins",
+      "desc": "Select a package and place your order. Coins will be credited once an admin approves your payment.",
+      "coins": "coins",
+      "placing": "Placing order…",
+      "buy": "Buy {coins} coins — {price}",
+      "orderPlaced": "Order placed for {coins} coins — awaiting admin approval.",
+      "orderFailed": "Order failed",
+      "topupFailed": "Top-up failed",
+      "unknownError": "Unknown error"
+    },
+    "balanceLabel": "Coin Balance",
+    "balanceHint": "Each exam variant generation costs 1 coin",
+    "ordersTitle": "Purchase Orders",
+    "ordersDesc": "Last 50 top-up orders",
+    "ordersEmpty": "No orders yet.",
+    "coins": "coins",
+    "txTitle": "Transaction History",
+    "txDesc": "Last 100 transactions",
+    "txEmpty": "No transactions yet. Generate some exam variants to see your history here.",
+    "txPurchase": "Coins purchased",
+    "txDeducted": "Coins deducted"
+  },
+  "Auth": {
+    "loginTitle": "Login",
+    "loginDescription": "Enter your email below to login to your account",
+    "emailLabel": "Email",
+    "emailPlaceholder": "m@example.com",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot your password?",
+    "loggingIn": "Logging in...",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "signUpDescription": "Create a new account",
+    "repeatPasswordLabel": "Repeat Password",
+    "passwordsNoMatch": "Passwords do not match",
+    "creatingAccount": "Creating an account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "errorGeneric": "An error occurred. Please try again."
+  },
+  "Projects": {
+    "new": {
+      "title": "New Project",
+      "description": "Give your project a name to get started.",
+      "projectName": "Project name",
+      "placeholder": "e.g. Midterm Exam 2026",
+      "cancel": "Cancel",
+      "create": "Create Project",
+      "creating": "Creating..."
+    },
+    "title": "My Projects",
+    "detail": "Detail",
+    "noProjects": "No projects created yet. Start by creating a new project!",
+    "createProject": "Create New Project",
+    "saveDescription": "Save description",
+    "addDescription": "Add a description…",
+    "extractedContent": "Extracted content",
+    "extractedContentPlaceholder": "Extracted text from the file will appear here…",
+    "savingMetadata": "Saving project data…",
+    "autoSaving": "Auto-saving…",
+    "autoSaved": "Auto-saved",
+    "description": "Description",
+    "targetLanguage": "Target language",
+    "numberOfVariants": "Number of variants",
+    "variantCount": "{count} variants",
+    "noExtractedContent": "No extracted content yet. Upload and extract a file above before generating.",
+    "insufficientCoins": "Insufficient coins. You need {cost} coin(s) but have {balance ?? 0}.",
+    "topUp": "Top Up Coins",
+    "generating": "Generating…",
+    "generateVariants": "Generate variants",
+    "cost": "Costs {cost} {coin}",
+    "costExplain": "{coins} per variant ({tier})",
+    "status": {
+      "draft": "Draft",
+      "extracting": "Extracting",
+      "generating": "Generating",
+      "ready": "Ready",
+      "done": "Done",
+      "all": "All",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed"
+    }
+  },
+  "Preview": {
+    "title": "Preview",
+    "noVisualPreview": "No visual preview was generated for this DOCX file.",
+    "source": "Source File",
+    "description": "Upload a PDF or DOCX and review preview + extracted content."
+  },
+  "Menu": {
+    "title": "Quick Exam Gen",
+    "home": "Home",
+    "projects": "Projects",
+    "billing": "Billing",
+    "admin": "Admin"
+  },
+  "Metadata": {
+    "title": "Quick Exam Gen - Easy Online Exam Creation",
+    "description": "Quick Exam Gen is an online exam creation tool that helps teachers and students create high-quality exams quickly and easily."
   }
 }
