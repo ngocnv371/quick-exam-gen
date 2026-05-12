@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "vite"
+		},
+		{
+			"path": "supabase"
+		},
+		{
+			"path": "nextjs"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"wrangler.json": "jsonc"
+		}
+	}
+}
