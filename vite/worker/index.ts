@@ -1,28 +1,127 @@
 /**
- * well this is one way to do it if we're sticking to Cloudflare worker.
- * But we can do Supabase's Edge Functions instead, which is more straightforward and has better integration with Supabase.
+ * Meant to be deployed as a Cloudflare Worker.
+ * This worker serve one endpoint at POST /api/exam-gen to create exam variants using Gemini Pro.
  */
+// import { withSupabase } from "jsr:@supabase/server@^1";
+import { google, type GoogleLanguageModelOptions } from "@ai-sdk/google";
+import { generateText, Output } from "ai";
+import { z } from "zod";
+
+export const cors = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "authorization, content-type",
+  "Access-Control-Max-Age": "3600",
+  Vary: "Access-Control-Request-Headers",
+};
+
+class ClientError extends Error {}
+
+const ChoiceSchema = z.object({
+  text: z.string(),
+  isCorrect: z.boolean(),
+});
+const QuestionSchema = z.object({
+  index: z.number(),
+  text: z.string(),
+  explanation: z.string(),
+  type: z.enum(["multiple-choice", "open-ended"]),
+  choices: z.array(ChoiceSchema).min(2).max(4).optional(),
+});
+
+const ExamSchema = z.object({
+  subject: z.string(),
+  title: z.string(),
+  questions: z.array(QuestionSchema).min(1),
+});
+
+const ResultSchema = z.object({
+  variants: z.array(ExamSchema).length(2),
+});
+
+const SYSTEM_PROMPT =
+  "You are an expert exam creator. Always return a structured exam matching the given schema.";
+
 export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    
-    // 1. Simple Routing
-    if (url.pathname === "/api/data") {
-      
-      // 2. Add your secret key (stored in env.GEMINI_API_KEY)
-      const modifiedRequest = new Request("https://api.thirdparty.com/v1/resource", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${env.GEMINI_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+  fetch: async (request, env) => {
+    try {
+      if (request.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: cors });
+      }
+
+      if (request.method === "GET") {
+        return Response.json({ name: "Quick Exam Gen Worker version 1.0" });
+      }
+
+      const body = (await request.json().catch(() => {
+        throw new ClientError("Invalid JSON payload");
+      })) as {
+        exam?: unknown;
+        quantity?: unknown;
+      };
+      const { exam, quantity } = body;
+
+      if (typeof exam !== "string" || !exam.trim()) {
+        throw new ClientError("Request must include a non-empty exam string");
+      }
+
+      const key = env.GOOGLE_GENERATIVE_AI_API_KEY;
+      if (typeof key !== "string" || !key.trim()) {
+        throw new ClientError(
+          "Missing or invalid GOOGLE_GENERATIVE_AI_API_KEY in environment variables",
+        );
+      }
+
+      const model = google("gemini-3.1-pro-preview");
+
+      const prompt = `Given the following source exam content, generate ${
+        quantity ?? 2
+      } distinct exam variants with the same format and key learning objectives, but with different wording, examples, and scenarios. 
+
+For each variant:
+- Keep the same subject, difficulty level, and question structure
+- Maintain the same core knowledge being tested
+- Replace examples and contexts with completely different ones (e.g., if a question uses "cookies", use "apples" or another entirely different context)
+- Rephrase questions substantially while preserving the learning objective
+- Shuffle question order
+- Preserve question types (multiple-choice or open-ended)
+- For multiple-choice questions, provide 4 answer choices labeled A, B, C, D
+- Ensure correct answers remain correct in the new context
+
+Source Exam Content:
+${exam}
+`;
+
+      const result = await generateText({
+        model,
+        system: SYSTEM_PROMPT,
+        prompt,
+        providerOptions: {
+          thinkingConfig: {
+            includeThoughts: false,
+            thinkingLevel: "low",
+          },
+        } satisfies GoogleLanguageModelOptions,
+        output: Output.object({
+          schema: ResultSchema,
+        }),
       });
 
-      // 3. Fetch and return
-      const response = await fetch(modifiedRequest);
-      return response;
-    }
+      return Response.json(result.output, { status: 200 });
+    } catch (err) {
+      if (err instanceof ClientError) {
+        return Response.json({ error: err.message }, { status: 400 });
+      }
 
-    return new Response("Not Found", { status: 404 });
-  }
+      console.error("generateText error:", err);
+      console.error("Assistant chat error:", err);
+      return Response.json(
+        {
+          error: "Failed to process generateText request",
+          details: err instanceof Error ? err.message : String(err),
+        },
+        { status: 500 },
+      );
+    }
+  },
 } satisfies ExportedHandler<Env>;

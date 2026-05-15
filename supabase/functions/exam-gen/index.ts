@@ -1,6 +1,5 @@
 /*
- * 1) Setup OPENAI_API_KEY secret to get started.
- * 2) Call this endpoint with { prompt, model? } to generate a recipe object matching the schema below.
+ * This is a trap, Edge Functions bill by seconds so 'await' is actually costly.
  */
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { withSupabase } from "jsr:@supabase/server@^1";
@@ -65,7 +64,17 @@ export default {
 
       const prompt = `Given the following source exam content, generate ${
         quantity ?? 2
-      } distinct exam variants in the same subject and difficulty level. Shuffle question order and rephrase questions slightly while keeping the same meaning and correct answers. Preserve question types (multiple-choice or open-ended). For multiple-choice questions, provide 4 answer choices labeled A, B, C, D.
+      } distinct exam variants with the same format and key learning objectives, but with different wording, examples, and scenarios. 
+
+For each variant:
+- Keep the same subject, difficulty level, and question structure
+- Maintain the same core knowledge being tested
+- Replace examples and contexts with completely different ones (e.g., if a question uses "cookies", use "apples" or another entirely different context)
+- Rephrase questions substantially while preserving the learning objective
+- Shuffle question order
+- Preserve question types (multiple-choice or open-ended)
+- For multiple-choice questions, provide 4 answer choices labeled A, B, C, D
+- Ensure correct answers remain correct in the new context
 
 Source Exam Content:
 ${exam}
