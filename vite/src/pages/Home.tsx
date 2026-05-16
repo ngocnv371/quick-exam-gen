@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import heroImg from '../assets/hero.png'
 
 export default function Home() {
@@ -15,6 +16,9 @@ export default function Home() {
           storytelling rhythm for teams, templates, and delivery.
         </p>
         <div className="actions-row">
+          <Link to="/projects" className="pill-btn primary">
+            Open Projects
+          </Link>
           <button className="pill-btn primary" onClick={() => setCount((value) => value + 1)}>
             Draft counter: {count}
           </button>
