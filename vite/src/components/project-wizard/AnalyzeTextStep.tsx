@@ -32,18 +32,17 @@ async function callAnalyzeTextApi(rawText: string) {
 }
 
 export function AnalyzeTextStep() {
-  const { project, loading } = useContext(ProjectContext)!;
+  const { project, isAnalyzing } = useContext(ProjectContext)!;
   const dispatch = useContext(ProjectDispatchContext)!;
   const extractedText = project?.metadata?.content as string;
   const analysis = project?.metadata?.analysis as ExamAnalysis;
-  const isAnalyzing = loading;  
   
   const onAnalyze = async () => {
     if (!extractedText) {
       return;
     }
 
-    dispatch({ type: "SET_LOADING", payload: true });
+    dispatch({ type: "SET_IS_ANALYZING", payload: true });
 
     try {
       const analyzedText = await callAnalyzeTextApi(extractedText);
@@ -51,7 +50,7 @@ export function AnalyzeTextStep() {
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: (error as Error).message });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: "SET_IS_ANALYZING", payload: false });
     }
   };
 

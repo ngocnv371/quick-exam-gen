@@ -31,6 +31,8 @@ export default function ProjectDetail() {
     project: null,
     step: "select",
     loading: false,
+    isAnalyzing: false,
+    isGenerating: false,
     error: null,
   });
 
@@ -42,7 +44,7 @@ export default function ProjectDetail() {
 
     const loadProject = async () => {
       console.log("Loading project with ID:", projectId);
-      dispatch({ type: "SET_LOADING", payload: null });
+      dispatch({ type: "SET_LOADING", payload: true });
 
       const { data, error: fetchError } = await supabase
         .from("projects")
@@ -178,7 +180,7 @@ export default function ProjectDetail() {
                   <ReviewGenerateStep />
                 </div>
                 <div hidden={state.step !== "result"}>
-                  <ResultStep variantsResult={null} />
+                  <ResultStep />
                 </div>
               </section>
             ) : null}

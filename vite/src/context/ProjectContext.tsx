@@ -43,6 +43,8 @@ export type ProjectState = {
   project: ProjectDetailViewModel | null;
   step: WizardStep;
   loading: boolean;
+  isAnalyzing: boolean;
+  isGenerating: boolean;
   error: string | null;
 };
 
@@ -60,8 +62,18 @@ export function projectReducer(
       };
     case "SET_LOADING":
       return { ...state, loading: action.payload as boolean };
+    case "SET_IS_ANALYZING":
+      return { ...state, isAnalyzing: action.payload as boolean };
+    case "SET_IS_GENERATING":
+      return { ...state, isGenerating: action.payload as boolean };
     case "SET_ERROR":
-      return { ...state, loading: false, error: action.payload as string };
+      return {
+        ...state,
+        loading: false,
+        isAnalyzing: false,
+        isGenerating: false,
+        error: action.payload as string,
+      };
     case "SET_STEP":
       return { ...state, step: action.payload as WizardStep };
     case "SET_CONTENT":

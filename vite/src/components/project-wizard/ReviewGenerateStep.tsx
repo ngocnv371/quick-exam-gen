@@ -31,9 +31,9 @@ async function callGenerateApi(rawText: string, quantity: number) {
 }
 
 export function ReviewGenerateStep() {
-  const { project, loading } = useContext(ProjectContext)!;
+  const { project, isGenerating } = useContext(ProjectContext)!;
   const dispatch = useContext(ProjectDispatchContext)!;
-  const isGeneratingVariants = loading;
+  const isGeneratingVariants = isGenerating;
   const analyzedContent = project?.metadata?.analysis as string;
 
   async function onGenerateVariants() {
@@ -41,7 +41,7 @@ export function ReviewGenerateStep() {
       return;
     }
 
-    dispatch({ type: "SET_LOADING", payload: true });
+    dispatch({ type: "SET_IS_GENERATING", payload: true });
 
     try {
       const variants = await callGenerateApi(analyzedContent, 2);
@@ -49,7 +49,7 @@ export function ReviewGenerateStep() {
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: (error as Error).message });
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: "SET_IS_GENERATING", payload: false });
     }
   }
 
