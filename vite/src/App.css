@@ -376,6 +376,109 @@
   gap: var(--space-xs);
 }
 
+.exam-wizard {
+  display: grid;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.wizard-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-xs);
+}
+
+.wizard-tab {
+  border: var(--space-hair) solid var(--hairline);
+  border-radius: var(--round-md);
+  background: rgba(255, 255, 255, 0.55);
+  padding: 10px 12px;
+  text-align: left;
+  display: grid;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.wizard-tab.is-active {
+  border-color: var(--ink);
+  background: var(--canvas);
+}
+
+.wizard-tab.is-completed {
+  background: rgba(200, 230, 205, 0.45);
+}
+
+.wizard-tab-index {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
+.wizard-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.09);
+  overflow: hidden;
+}
+
+.wizard-progress-fill {
+  height: 100%;
+  background: var(--semantic-success);
+  transition: width 240ms ease;
+}
+
+.wizard-step-panel {
+  border-radius: var(--round-md);
+  border: var(--space-hair) solid var(--hairline);
+  background: rgba(255, 255, 255, 0.7);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.wizard-field {
+  display: grid;
+  gap: 8px;
+  max-width: 420px;
+}
+
+.wizard-helper {
+  margin: 0;
+  font-size: 15px;
+}
+
+.wizard-textarea {
+  width: 100%;
+  min-height: 220px;
+  border: var(--space-hair) solid var(--hairline);
+  border-radius: var(--round-sm);
+  background: var(--canvas);
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.wizard-pre {
+  margin: 0;
+  padding: 12px;
+  border-radius: var(--round-sm);
+  border: var(--space-hair) solid var(--hairline);
+  background: var(--canvas);
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.wizard-big-cta {
+  font-size: 22px;
+  padding: 16px 28px;
+}
+
 @media (max-width: 960px) {
   .top-nav {
     padding: 12px var(--space-md);

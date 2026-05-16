@@ -38,5 +38,7 @@ export function DocxExtractor({
     return null;
   }
 
-  return <div dangerouslySetInnerHTML={{ __html: html || "" }} />;
+  return <>
+  <hr style={{ width: "100%", margin: "1rem 0" }} />
+  <div dangerouslySetInnerHTML={{ __html: html || "" }} /></>;
 }

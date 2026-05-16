@@ -1,19 +1,13 @@
 /**
  * Meant to be deployed as a Cloudflare Worker.
- * This worker serve one endpoint at POST /api/exam-gen to create exam variants using Gemini Pro.
+ * This worker exposes Hono endpoints for health, exam analysis, and exam variant generation.
  */
 // import { withSupabase } from "jsr:@supabase/server@^1";
 import { google, type GoogleLanguageModelOptions } from "@ai-sdk/google";
 import { generateText, Output } from "ai";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { z } from "zod";
-
-export const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "authorization, content-type",
-  "Access-Control-Max-Age": "3600",
-  Vary: "Access-Control-Request-Headers",
-};
 
 class ClientError extends Error {}
 
@@ -39,44 +33,129 @@ const ResultSchema = z.object({
   variants: z.array(ExamSchema).length(2),
 });
 
+const AnalyzeQuestionSchema = z.object({
+  index: z.number(),
+  text: z.string(),
+  questionType: z.enum(["multiple-choice", "open-ended", "unknown"]),
+  intendedPurpose: z.string(),
+  testedSkills: z.array(z.string()).min(1),
+});
+
+const AnalyzeResultSchema = z.object({
+  examTitle: z.string(),
+  subject: z.string(),
+  overallIntent: z.string(),
+  questions: z.array(AnalyzeQuestionSchema).min(1),
+});
+
 const SYSTEM_PROMPT =
   "You are an expert exam creator. Always return a structured exam matching the given schema.";
 
-export default {
-  fetch: async (request, env) => {
-    try {
-      if (request.method === "OPTIONS") {
-        return new Response(null, { status: 204, headers: cors });
-      }
+const app = new Hono<{ Bindings: Env }>();
 
-      if (request.method === "GET") {
-        return Response.json({ name: "Quick Exam Gen Worker version 1.0" });
-      }
+app.use(
+  "*",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["authorization", "content-type"],
+    maxAge: 3600,
+  }),
+);
 
-      const body = (await request.json().catch(() => {
-        throw new ClientError("Invalid JSON payload");
-      })) as {
-        exam?: unknown;
-        quantity?: unknown;
-      };
-      const { exam, quantity } = body;
+const getModel = (env: Env) => {
+  const key = env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (typeof key !== "string" || !key.trim()) {
+    throw new ClientError(
+      "Missing or invalid GOOGLE_GENERATIVE_AI_API_KEY in environment variables",
+    );
+  }
 
-      if (typeof exam !== "string" || !exam.trim()) {
-        throw new ClientError("Request must include a non-empty exam string");
-      }
+  return google("gemini-3.1-pro-preview");
+};
 
-      const key = env.GOOGLE_GENERATIVE_AI_API_KEY;
-      if (typeof key !== "string" || !key.trim()) {
-        throw new ClientError(
-          "Missing or invalid GOOGLE_GENERATIVE_AI_API_KEY in environment variables",
-        );
-      }
+const parseJsonBody = async <T>(req: Request): Promise<T> => {
+  return (await req.json().catch(() => {
+    throw new ClientError("Invalid JSON payload");
+  })) as T;
+};
 
-      const model = google("gemini-3.1-pro-preview");
+app.get("api/", (c) => {
+  return c.json({ name: "Quick Exam Gen Worker version 1.0" });
+});
 
-      const prompt = `Given the following source exam content, generate ${
-        quantity ?? 2
-      } distinct exam variants with the same format and key learning objectives, but with different wording, examples, and scenarios. 
+app.post("api/analyze", async (c) => {
+  try {
+    const body = await parseJsonBody<{ content?: unknown }>(c.req.raw);
+    const { content } = body;
+
+    if (typeof content !== "string" || !content.trim()) {
+      throw new ClientError("Request must include a non-empty content string");
+    }
+
+    const model = getModel(c.env);
+    const prompt = `Analyze the following exam content and extract a structured understanding of the exam.
+
+Focus on:
+- question list
+- question type (multiple-choice, open-ended, or unknown)
+- the intended purpose of each question (what it is trying to assess)
+- tested skills for each question
+
+Return the output strictly according to schema.
+
+Exam Content:
+${content}`;
+
+    const result = await generateText({
+      model,
+      system:
+        "You are an assessment design analyst. Extract exam structure and pedagogical intent from raw exam text.",
+      prompt,
+      providerOptions: {
+        thinkingConfig: {
+          includeThoughts: false,
+          thinkingLevel: "low",
+        },
+      } satisfies GoogleLanguageModelOptions,
+      output: Output.object({
+        schema: AnalyzeResultSchema,
+      }),
+    });
+
+    return c.json(result.output, 200);
+  } catch (err) {
+    if (err instanceof ClientError) {
+      return c.json({ error: err.message }, 400);
+    }
+
+    console.error("analyze error:", err);
+    return c.json(
+      {
+        error: "Failed to process analyze request",
+        details: err instanceof Error ? err.message : String(err),
+      },
+      500,
+    );
+  }
+});
+
+app.post("api/generate-variants", async (c) => {
+  try {
+    const body = await parseJsonBody<{ exam?: unknown; quantity?: unknown }>(
+      c.req.raw,
+    );
+    const { exam, quantity } = body;
+
+    if (typeof exam !== "string" || !exam.trim()) {
+      throw new ClientError("Request must include a non-empty exam string");
+    }
+
+    const model = getModel(c.env);
+
+    const prompt = `Given the following source exam content, generate ${
+      quantity ?? 2
+    } distinct exam variants with the same format and key learning objectives, but with different wording, examples, and scenarios. 
 
 For each variant:
 - Keep the same subject, difficulty level, and question structure
@@ -92,36 +171,36 @@ Source Exam Content:
 ${exam}
 `;
 
-      const result = await generateText({
-        model,
-        system: SYSTEM_PROMPT,
-        prompt,
-        providerOptions: {
-          thinkingConfig: {
-            includeThoughts: false,
-            thinkingLevel: "low",
-          },
-        } satisfies GoogleLanguageModelOptions,
-        output: Output.object({
-          schema: ResultSchema,
-        }),
-      });
-
-      return Response.json(result.output, { status: 200 });
-    } catch (err) {
-      if (err instanceof ClientError) {
-        return Response.json({ error: err.message }, { status: 400 });
-      }
-
-      console.error("generateText error:", err);
-      console.error("Assistant chat error:", err);
-      return Response.json(
-        {
-          error: "Failed to process generateText request",
-          details: err instanceof Error ? err.message : String(err),
+    const result = await generateText({
+      model,
+      system: SYSTEM_PROMPT,
+      prompt,
+      providerOptions: {
+        thinkingConfig: {
+          includeThoughts: false,
+          thinkingLevel: "low",
         },
-        { status: 500 },
-      );
+      } satisfies GoogleLanguageModelOptions,
+      output: Output.object({
+        schema: ResultSchema,
+      }),
+    });
+
+    return c.json(result.output, 200);
+  } catch (err) {
+    if (err instanceof ClientError) {
+      return c.json({ error: err.message }, 400);
     }
-  },
-} satisfies ExportedHandler<Env>;
+
+    console.error("generate variants error:", err);
+    return c.json(
+      {
+        error: "Failed to process generate variants request",
+        details: err instanceof Error ? err.message : String(err),
+      },
+      500,
+    );
+  }
+});
+
+export default app;
