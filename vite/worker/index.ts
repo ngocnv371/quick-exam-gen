@@ -42,7 +42,7 @@ const AnalyzeQuestionSchema = z.object({
 });
 
 const AnalyzeResultSchema = z.object({
-  examTitle: z.string(),
+  title: z.string(),
   subject: z.string(),
   overallIntent: z.string(),
   questions: z.array(AnalyzeQuestionSchema).min(1),
@@ -63,7 +63,7 @@ app.use(
   }),
 );
 
-const getModel = (env: Env) => {
+const getAnalysisModel = (env: Env) => {
   const key = env.GOOGLE_GENERATIVE_AI_API_KEY;
   if (typeof key !== "string" || !key.trim()) {
     throw new ClientError(
@@ -71,7 +71,19 @@ const getModel = (env: Env) => {
     );
   }
 
-  return google("gemini-3.1-pro-preview");
+  return google("gemini-3.1-flash-lite");
+};
+
+const getGenerativeModel = (env: Env) => {
+  const key = env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (typeof key !== "string" || !key.trim()) {
+    throw new ClientError(
+      "Missing or invalid GOOGLE_GENERATIVE_AI_API_KEY in environment variables",
+    );
+  }
+
+  // we use flash-lite for DEV
+  return google("gemini-3.1-flash-lite"); // gemini-3.1-pro-preview
 };
 
 const parseJsonBody = async <T>(req: Request): Promise<T> => {
@@ -93,7 +105,7 @@ app.post("api/analyze", async (c) => {
       throw new ClientError("Request must include a non-empty content string");
     }
 
-    const model = getModel(c.env);
+    const model = getAnalysisModel(c.env);
     const prompt = `Analyze the following exam content and extract a structured understanding of the exam.
 
 Focus on:
@@ -147,11 +159,17 @@ app.post("api/generate-variants", async (c) => {
     );
     const { exam, quantity } = body;
 
-    if (typeof exam !== "string" || !exam.trim()) {
-      throw new ClientError("Request must include a non-empty exam string");
+    if (typeof quantity !== "number" || quantity < 1 || quantity > 5) {
+      throw new ClientError(
+        "Quantity must be a number between 1 and 5 indicating how many variants to generate",
+      );
     }
 
-    const model = getModel(c.env);
+    if ((exam as { questions?: unknown[] })?.questions?.length === 0) {
+      throw new ClientError("Request must include an exam");
+    }
+
+    const model = getGenerativeModel(c.env);
 
     const prompt = `Given the following source exam content, generate ${
       quantity ?? 2
