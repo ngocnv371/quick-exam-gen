@@ -270,6 +270,112 @@
   color: var(--semantic-success);
 }
 
+.projects-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-sm);
+}
+
+.projects-filter-item {
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.projects-input,
+.projects-select {
+  width: 100%;
+  border: var(--space-hair) solid var(--hairline);
+  border-radius: var(--round-sm);
+  background: var(--canvas);
+  padding: 10px 12px;
+  font-size: 16px;
+}
+
+.projects-error,
+.projects-loading,
+.projects-empty {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--round-sm);
+  font-size: 15px;
+}
+
+.projects-error {
+  border: var(--space-hair) solid rgba(181, 48, 33, 0.4);
+  background: rgba(237, 87, 65, 0.12);
+}
+
+.projects-loading,
+.projects-empty {
+  border: var(--space-hair) solid var(--hairline);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.projects-table-wrap {
+  overflow: auto;
+  border-radius: var(--round-md);
+  border: var(--space-hair) solid var(--hairline);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.projects-table th,
+.projects-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: var(--space-hair) solid var(--hairline);
+  font-size: 15px;
+}
+
+.projects-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-family: var(--font-mono);
+}
+
+.projects-row {
+  cursor: pointer;
+}
+
+.projects-row:hover,
+.projects-row:focus-visible {
+  background: rgba(0, 0, 0, 0.04);
+  outline: none;
+}
+
+.projects-status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--round-pill);
+  border: var(--space-hair) solid var(--hairline);
+  background: var(--canvas);
+  padding: 3px 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.projects-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.projects-pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
 @media (max-width: 960px) {
   .top-nav {
     padding: 12px var(--space-md);
@@ -316,5 +422,9 @@
     border-radius: 0;
     margin-inline: -16px;
     padding: var(--space-xl) 16px;
+  }
+
+  .projects-table {
+    min-width: 560px;
   }
 }

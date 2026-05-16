@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Billing from './pages/Billing'
 import Projects from './pages/Projects'
+import ProjectDetail from './pages/ProjectDetail'
 import Login from './pages/Login'
 import { useAuth } from './hooks/useAuth'
 import './App.css'
@@ -92,6 +93,7 @@ function App() {
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
         <Route element={<ProtectedRoute isAuthenticated={!!user} />}>
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:projectId" element={<ProjectDetail />} />
           <Route path="/billing" element={<Billing />} />
         </Route>
       </Routes>
