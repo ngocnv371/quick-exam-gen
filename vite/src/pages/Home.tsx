@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '../assets/vite.svg'
-import cloudflareLogo from '../assets/cloudflare.svg'
 import heroImg from '../assets/hero.png'
 
 export default function Home() {
@@ -9,96 +6,83 @@ export default function Home() {
   const [name, setName] = useState('unknown')
 
   return (
-    <div>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <main className="page">
+      <section className="hero-section">
+        <p className="eyebrow">Quick Exam Gen</p>
+        <h1 className="display-title">Build high-quality exams with a crisp editorial flow.</h1>
+        <p className="subhead-copy">
+          Monochrome controls keep the product predictable, while large color panels create
+          storytelling rhythm for teams, templates, and delivery.
+        </p>
+        <div className="actions-row">
+          <button className="pill-btn primary" onClick={() => setCount((value) => value + 1)}>
+            Draft counter: {count}
+          </button>
+          <button
+            className="pill-btn secondary"
+            onClick={() => {
+              fetch('/api/')
+                .then((res) => res.json())
+                .then((data) => setName(data.name))
+            }}
+            aria-label="Fetch API workspace name"
+          >
+            Ping API
+          </button>
         </div>
-        <div>
-          <h1>Welcome to Home</h1>
-          <p>
-            Edit <code>src/App.tsx</code> or <code>worker/index.ts</code> and save to test <code>HMR</code>
-          </p>
+        <p className="caption-line">API identity: {name}</p>
+        <img className="hero-art" src={heroImg} alt="Workspace preview" />
+      </section>
+
+      <section className="color-block block-lime">
+        <h2 className="headline">Authoring system, not just a form.</h2>
+        <p className="body-copy">
+          Start from reusable blocks for difficulty, outcomes, and rubrics. Every exam stays
+          legible to educators and predictable for grading pipelines.
+        </p>
+        <div className="stat-grid">
+          <div className="stat-box">
+            <p className="stat-value">12s</p>
+            <p className="stat-label">to draft first version</p>
+          </div>
+          <div className="stat-box">
+            <p className="stat-value">4</p>
+            <p className="stat-label">difficulty bands mapped</p>
+          </div>
+          <div className="stat-box">
+            <p className="stat-value">100%</p>
+            <p className="stat-label">machine-readable output</p>
+          </div>
         </div>
-        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', padding: 0 }}>
-          <li>
-            <button
-              className="counter"
-              onClick={() => setCount((count) => count + 1)}
-            >
-              Count is {count}
-            </button>
-          </li>
-          <li>
-            <button
-              className="counter"
-              onClick={() => {
-                fetch('/api/')
-                  .then((res) => res.json())
-                  .then((data) => setName(data.name))
-              }}
-              aria-label='get name'
-            >
-              Name from API is: {name}
-            </button>
-          </li>
+      </section>
+
+      <section className="color-block block-navy">
+        <h2 className="headline">Ship assessments confidently.</h2>
+        <p className="body-copy">
+          Track revisions, compare generated variants, and publish polished exams with one primary
+          action and clear fallback paths.
+        </p>
+        <ul className="feature-list">
+          <li>Versioned drafts for every release cycle</li>
+          <li>Template governance for multi-campus teams</li>
+          <li>Instant export to exam-ready formats</li>
         </ul>
       </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-            <li>
-              <a href="https://workers.cloudflare.com/" target="_blank">
-                <img className="button-icon" src={cloudflareLogo} alt="" />
-                Workers Docs
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-          </ul>
-        </div>
+      <section className="panel-grid">
+        <article className="panel-card block-surface">
+          <h3>Template Library</h3>
+          <p>Browse pre-built structures for quizzes, finals, and oral assessments.</p>
+        </article>
+        <article className="panel-card block-surface">
+          <h3>Rubric Sync</h3>
+          <p>Keep question objectives tied to grading criteria from the first draft.</p>
+        </article>
+        <article className="panel-card block-surface">
+          <h3>Audit Trail</h3>
+          <p>Know who edited what, when, and why before publication.</p>
+        </article>
       </section>
-    </div>
+    </main>
   )
 }

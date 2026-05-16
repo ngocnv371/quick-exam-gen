@@ -1,47 +1,37 @@
 export default function About() {
   return (
-    <div>
-      <section id="center">
-        <div>
-          <h1>About Us</h1>
-          <p>
-            This is a sample SPA built with React, Vite, and React Router.
-          </p>
-          <p>
-            React Router enables client-side routing, allowing us to navigate between pages
-            without full page reloads, creating a smooth single-page application experience.
-          </p>
-        </div>
+    <main className="page">
+      <section className="hero-section">
+        <p className="eyebrow">About</p>
+        <h1 className="display-title">A technical tool with a human pulse.</h1>
+        <p className="subhead-copy">
+          Quick Exam Gen is built around clear writing, reliable automation, and transparent
+          collaboration between academic and product teams.
+        </p>
       </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Learn More</h2>
-          <p>Discover more about our tech stack</p>
-          <ul>
-            <li>
-              <a href="https://reactrouter.com/" target="_blank">
-                React Router Documentation
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                React Documentation
-              </a>
-            </li>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                Vite Documentation
-              </a>
-            </li>
-          </ul>
-        </div>
+      <section className="color-block block-lilac">
+        <h2 className="headline">Editorial clarity first.</h2>
+        <p className="body-copy">
+          We intentionally keep navigation, forms, and controls monochrome so attention goes to
+          content quality, not decorative noise.
+        </p>
       </section>
-    </div>
+
+      <section className="panel-grid">
+        <article className="panel-card">
+          <h3>Built with React + Vite</h3>
+          <p>Fast local feedback and clean component composition for product iteration.</p>
+        </article>
+        <article className="panel-card">
+          <h3>Routed for flow</h3>
+          <p>Client-side navigation keeps momentum while moving across projects and billing.</p>
+        </article>
+        <article className="panel-card">
+          <h3>Supabase backend</h3>
+          <p>Authentication and API-backed generation enable secure, scalable use.</p>
+        </article>
+      </section>
+    </main>
   )
 }
