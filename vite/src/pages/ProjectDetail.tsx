@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { Link, useParams } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { getProjectDetail } from "../lib/supabase";
 import { SelectDocumentStep } from "../components/project-wizard/SelectDocumentStep";
 import {
   ProjectContext,
@@ -46,12 +46,7 @@ export default function ProjectDetail() {
       console.log("Loading project with ID:", projectId);
       dispatch({ type: "SET_LOADING", payload: true });
 
-      const { data, error: fetchError } = await supabase
-        .from("projects")
-        .select("id, title, status, type, metadata, created_at, updated_at")
-        .eq("id", projectId)
-        .eq("type", "exam")
-        .maybeSingle();
+      const { data, error: fetchError } = await getProjectDetail(projectId);
 
       if (fetchError) {
         dispatch({ type: "SET_ERROR", payload: fetchError.message });
@@ -93,7 +88,6 @@ export default function ProjectDetail() {
       <ProjectDispatchContext.Provider value={dispatch}>
         <main className="page">
           <section className="hero-section">
-            <p className="eyebrow">Project detail</p>
             {state.loading ? (
               <h1 className="display-title">Loading project...</h1>
             ) : null}
@@ -110,19 +104,6 @@ export default function ProjectDetail() {
               <p className="projects-error" role="alert">
                 {state.error}
               </p>
-            ) : null}
-
-            {!state.error && state.project ? (
-              <div className="panel-grid">
-                <article className="panel-card block-surface">
-                  <h3>Status</h3>
-                  <p>{state.project.status}</p>
-                </article>
-                <article className="panel-card block-surface">
-                  <h3>Updated</h3>
-                  <p>{new Date(state.project.updated_at).toLocaleString()}</p>
-                </article>
-              </div>
             ) : null}
 
             {!state.error && state.project ? (

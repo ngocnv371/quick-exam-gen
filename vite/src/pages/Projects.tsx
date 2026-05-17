@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { supabase } from '../lib/supabase'
-
-type ProjectStatus = 'all' | 'draft' | 'pending' | 'ready' | 'processing' | 'failed' | 'done' | 'archived'
+import { createProject, getProjects, type ProjectStatus } from '../lib/supabase'
 
 type ProjectRow = {
   id: string
@@ -46,21 +44,7 @@ export default function Projects() {
     const from = (page - 1) * PAGE_SIZE
     const to = from + PAGE_SIZE - 1
 
-    let query = supabase
-      .from('projects')
-      .select('id, title, status, created_at, updated_at', { count: 'exact' })
-      .eq('type', 'exam')
-      .order('created_at', { ascending: false })
-      .range(from, to)
-
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
-
-    const normalizedName = nameFilter.trim()
-    if (normalizedName) {
-      query = query.ilike('title', `%${normalizedName}%`)
-    }
+    const query = getProjects(nameFilter, status, from, to)
 
     const { data, count, error: fetchError } = await query
 
@@ -101,15 +85,7 @@ export default function Projects() {
 
     setIsCreating(true)
 
-    const { data, error: createError } = await supabase
-      .from('projects')
-      .insert({
-        user_id: user.id,
-        title: 'Untitled Exam',
-        type: 'exam',
-      })
-      .select('id')
-      .single()
+    const { data, error: createError } = await createProject(user.id)
 
     if (createError) {
       setError(`Could not create project: ${createError.message}`)
