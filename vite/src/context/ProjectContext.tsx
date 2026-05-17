@@ -121,6 +121,15 @@ export function projectReducer(
         };
       }
       return state;
+    case "UPDATE_TITLE":
+      if (state.project) {
+        return {
+          ...state,
+          project: { ...state.project, title: action.payload as string },
+          error: null,
+        };
+      }
+      return state;
     default:
       return state;
   }

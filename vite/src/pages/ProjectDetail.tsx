@@ -12,6 +12,7 @@ import {
 import { AnalyzeTextStep } from "../components/project-wizard/AnalyzeTextStep";
 import { ReviewGenerateStep } from "../components/project-wizard/ReviewGenerateStep";
 import { ResultStep } from "../components/project-wizard/ResultStep";
+import { ProjectTitle } from "../components/project-title";
 
 type StepConfig = {
   id: WizardStep;
@@ -95,7 +96,7 @@ export default function ProjectDetail() {
               <h1 className="display-title">Project unavailable</h1>
             ) : null}
             {!state.loading && !state.error && state.project ? (
-              <h1 className="display-title">{state.project.title}</h1>
+               <ProjectTitle />
             ) : null}
           </section>
 

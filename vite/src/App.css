@@ -611,6 +611,96 @@
   gap: var(--space-xs);
 }
 
+/* Project Title Editing */
+.project-title {
+  font-size: 26px;
+  font-weight: 540;
+  line-height: 1.35;
+  letter-spacing: -0.26px;
+  color: var(--ink);
+  cursor: pointer;
+  margin: 0;
+  padding: 8px 0;
+  transition: opacity 200ms ease;
+}
+
+.project-title:hover {
+  opacity: 0.8;
+}
+
+.project-title-edit-container {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.project-title-input {
+  font-size: 18px;
+  font-weight: 320;
+  line-height: 1.45;
+  letter-spacing: -0.26px;
+  color: var(--ink);
+  background: var(--canvas);
+  border: var(--space-hair) solid var(--hairline);
+  border-radius: var(--round-md);
+  padding: 12px 14px;
+  font-family: inherit;
+  flex: 1;
+  min-width: 200px;
+}
+
+.project-title-input:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.project-title-input:disabled {
+  opacity: 0.6;
+}
+
+.project-title-button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.project-title-button {
+  border: none;
+  border-radius: var(--round-pill);
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 480;
+  line-height: 1.4;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 200ms ease;
+}
+
+.project-title-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.project-title-button.save {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.project-title-button.save:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.project-title-button.cancel {
+  background: var(--canvas);
+  color: var(--ink);
+  border: var(--space-hair) solid var(--ink);
+}
+
+.project-title-button.cancel:hover:not(:disabled) {
+  background: var(--surface-soft);
+}
+
 .detail-section label {
   font-family: var(--font-mono);
   font-size: 12px;

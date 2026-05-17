@@ -62,6 +62,14 @@ export async function getProjectDetail(projectId: string) {
     .maybeSingle();
 }
 
+export async function updateProjectTitle(projectId: string, title: string) {
+  return supabase
+    .from("projects")
+    .update({ title })
+    .eq("id", projectId)
+    .eq("type", "exam");
+}
+
 /**
  * Update a single metadata field for a project. This function first retrieves the current metadata,
  * updates the specified field, and then saves the updated metadata back to the database. This approach
