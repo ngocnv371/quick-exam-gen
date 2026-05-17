@@ -38,7 +38,7 @@ export type ProjectDetailViewModel = {
   updated_at: string;
 };
 
-export type WizardStep = "select" | "analyze" | "review" | "result";
+export type WizardStep = "select" | "analyze" | "result";
 export type ProjectState = {
   project: ProjectDetailViewModel | null;
   step: WizardStep;
@@ -103,7 +103,7 @@ export function projectReducer(
           ...state,
           project: { ...state.project, metadata },
           error: null,
-          step: "review",
+          step: "analyze",
         };
       }
       return state;
@@ -133,6 +133,19 @@ export function projectReducer(
     default:
       return state;
   }
+}
+
+export function selectFurthestStep(state: ProjectState): WizardStep {
+  const project = state.project;
+  const metadata = project?.metadata || {};
+
+  if (!metadata.content) {
+    return "select";
+  }
+  if (!metadata.analysis) {
+    return "analyze";
+  }
+  return "result";
 }
 
 export const ProjectContext = createContext<ProjectState | null>(null);

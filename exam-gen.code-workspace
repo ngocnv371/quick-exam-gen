@@ -5,9 +5,6 @@
 		},
 		{
 			"path": "supabase"
-		},
-		{
-			"path": "nextjs"
 		}
 	],
 	"settings": {

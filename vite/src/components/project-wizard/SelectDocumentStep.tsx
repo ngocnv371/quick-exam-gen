@@ -4,8 +4,8 @@ import {
   ProjectContext,
   ProjectDispatchContext,
 } from "../../context/ProjectContext";
+import { Save, RefreshCcw } from "lucide-react";
 import { updateProjectMetadataField } from "../../lib/supabase";
-import "./SelectDocumentStep.css";
 
 export function SelectDocumentStep() {
   const [file, setFile] = useState<File | null>(null);
@@ -37,19 +37,21 @@ export function SelectDocumentStep() {
   const hasUnsavedChanges = editedContent !== originalContent;
 
   return (
-    <div className="wizard-step-panel">
-      <h2 className="headline">Step 1. Select document</h2>
-      <p className="body-copy">
-        Choose a PDF, DOC, or DOCX file. We extract raw text locally and use
-        that text for the next step.
-      </p>
+    <div className="space-y-lg">
+      <div>
+        <p className="text-body font-light text-ink">
+          Choose a PDF, DOC, or DOCX file. We extract raw text locally and use
+          that text for the next step.
+        </p>
+      </div>
 
-      <div className="wizard-field">
-        <label htmlFor="document-upload">Document file</label>
+      <div className="flex flex-col gap-xs">
+        <label htmlFor="document-upload" className="text-body-sm font-medium text-ink">Document file</label>
         <input
           id="document-upload"
           type="file"
           accept="application/pdf, .doc, .docx"
+          className="block text-body-sm text-ink file:mr-md file:py-sm file:px-md file:rounded-md file:border-0 file:text-body-sm file:font-medium file:bg-surface-soft file:text-ink hover:file:bg-ink/10"
           onChange={(event) => {
             const file =
               event.target.files && event.target.files[0]
@@ -67,32 +69,34 @@ export function SelectDocumentStep() {
       />
 
       {editedContent && (
-        <div className="content-editor-section">
-          <hr style={{ width: "100%" }} />
-          <label htmlFor="content-textarea" className="editor-label">
-            Document text
-          </label>
-          <textarea
-            id="content-textarea"
-            className="content-textarea"
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-            placeholder="Extracted content will appear here..."
-          />
+        <div className="space-y-lg pt-lg border-t border-hairline">
+          <div>
+            <label htmlFor="content-textarea" className="text-body-sm font-medium text-ink block mb-xs">
+              Document text
+            </label>
+            <textarea
+              id="content-textarea"
+              className="w-full min-h-[300px] px-md py-sm rounded-md border border-hairline bg-canvas text-ink placeholder:text-ink/40 focus:outline-none focus:ring-1 focus:ring-primary font-mono text-sm"
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              placeholder="Extracted content will appear here..."
+            />
+          </div>
 
-          <div className="editor-actions">
+          <div className="flex items-center gap-md">
             <button
-              className="btn btn-primary"
+              className="px-lg py-sm bg-primary text-on-primary rounded-pill text-button font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
               onClick={handleSave}
               disabled={!hasUnsavedChanges || isSaving}
               title={
                 !hasUnsavedChanges ? "No changes to save" : "Save changes"
               }
             >
+              {isSaving ? <RefreshCcw className="inline mr-2 animate-spin" /> : <Save className="inline mr-2" />}
               {isSaving ? "Saving..." : "Save"}
             </button>
             {hasUnsavedChanges && (
-              <span className="unsaved-indicator">
+              <span className="text-body-sm text-amber-600">
                 You have unsaved changes
               </span>
             )}

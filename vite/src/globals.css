@@ -1,0 +1,45 @@
+@config "../tailwind.config.js";
+@import "tailwindcss";
+
+@keyframes home-drift {
+	0% {
+		transform: translate3d(0, 0, 0) rotate(0deg);
+	}
+	50% {
+		transform: translate3d(0, -10px, 0) rotate(-2deg);
+	}
+	100% {
+		transform: translate3d(0, 0, 0) rotate(0deg);
+	}
+}
+
+@keyframes home-reveal {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, 18px, 0);
+	}
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+.home-shape {
+	animation: home-drift 9s ease-in-out infinite;
+}
+
+.home-reveal {
+	animation: home-reveal 620ms ease-out both;
+}
+
+.home-reveal-delay-1 {
+	animation-delay: 80ms;
+}
+
+.home-reveal-delay-2 {
+	animation-delay: 150ms;
+}
+
+.home-reveal-delay-3 {
+	animation-delay: 230ms;
+}

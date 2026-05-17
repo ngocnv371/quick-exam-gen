@@ -78,7 +78,7 @@ export function PdfExtractor({
       src={pdfPreviewUrl}
       width="100%"
       height="600px"
-      style={{ border: "none" }}
+      className="border-none"
     />
   );
 }

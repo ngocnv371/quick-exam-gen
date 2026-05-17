@@ -39,6 +39,6 @@ export function DocxExtractor({
   }
 
   return <>
-  <hr style={{ width: "100%", margin: "1rem 0" }} />
+  <hr className="w-full my-4" />
   <div dangerouslySetInnerHTML={{ __html: html || "" }} /></>;
 }

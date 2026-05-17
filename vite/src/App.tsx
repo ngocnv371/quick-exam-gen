@@ -7,7 +7,6 @@ import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import Login from './pages/Login'
 import { useAuth } from './hooks/useAuth'
-import './App.css'
 
 function ProtectedRoute({ isAuthenticated }: { isAuthenticated: boolean }) {
   const location = useLocation()
@@ -38,49 +37,49 @@ function App() {
 
   if (loading) {
     return (
-      <div className="page">
-        <section className="hero-section">
-          <p className="eyebrow">Loading</p>
-          <h1 className="display-title">Preparing your workspace...</h1>
+      <div className="w-full min-h-screen bg-canvas flex items-center justify-center">
+        <section className="text-center">
+          <p className="text-eyebrow uppercase text-ink tracking-wide">Loading</p>
+          <h1 className="text-display-lg font-light text-ink mt-md">Preparing your workspace...</h1>
         </section>
       </div>
     )
   }
 
   return (
-    <div className="app-shell">
-      <nav className="top-nav">
-        <div className="top-nav-left">
-          <span className="brand">QEG</span>
-          <div className="nav-links">
-            <Link to="/" className="nav-link">
-            Home
-          </Link>
-            <Link to="/projects" className="nav-link">
-            Projects
-          </Link>
-            <Link to="/billing" className="nav-link">
-            Billing
-          </Link>
-            <Link to="/about" className="nav-link">
-            About
-          </Link>
+    <div className="flex flex-col min-h-screen bg-canvas">
+      <nav className="flex items-center justify-between px-lg py-md bg-canvas border-b border-hairline">
+        <div className="flex items-center gap-xl">
+          <span className="text-headline font-bold text-ink">QEG</span>
+          <div className="flex gap-lg">
+            <Link to="/" className="text-body-sm text-ink hover:text-primary transition-colors">
+              Home
+            </Link>
+            <Link to="/projects" className="text-body-sm text-ink hover:text-primary transition-colors">
+              Projects
+            </Link>
+            <Link to="/billing" className="text-body-sm text-ink hover:text-primary transition-colors">
+              Billing
+            </Link>
+            <Link to="/about" className="text-body-sm text-ink hover:text-primary transition-colors">
+              About
+            </Link>
           </div>
         </div>
-        <div className="top-nav-right">
+        <div className="flex items-center gap-lg">
           {user ? (
             <>
-              <span className="user-email">{user.email}</span>
+              <span className="text-body-sm text-ink">{user.email}</span>
               <button
                 onClick={handleLogout}
                 disabled={isSigningOut}
-                className="pill-btn primary"
+                className="px-lg py-xs bg-primary text-on-primary rounded-pill text-button font-medium hover:opacity-90 disabled:opacity-70 transition-opacity"
               >
                 {isSigningOut ? 'Signing out...' : 'Logout'}
               </button>
             </>
           ) : (
-            <Link to="/login" className="pill-btn primary">
+            <Link to="/login" className="px-lg py-xs bg-primary text-on-primary rounded-pill text-button font-medium hover:opacity-90 transition-opacity inline-block">
               Login
             </Link>
           )}

@@ -49,29 +49,28 @@ export function ProjectTitle() {
 
   if (isEditing) {
     return (
-      <div className="project-title-edit-container">
+      <div className="flex flex-col gap-2 w-full mx-auto">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
-          onBlur={handleCancel}
           disabled={isSaving}
           autoFocus
-          className="project-title-input"
+          className="text-2xl font-bold px-4 py-2 rounded-lg border border-black focus:outline-none focus:ring-2 focus:ring-black"
         />
-        <div className="project-title-button-group">
+        <div className="flex gap-2 mt-2">
           <button
             onClick={handleSave}
             disabled={isSaving || !title.trim()}
-            className="project-title-button save"
+            className="bg-black text-white rounded-full px-6 py-2 font-medium transition-colors duration-150 disabled:opacity-50"
           >
             {isSaving ? "Saving..." : "Save"}
           </button>
           <button
             onClick={handleCancel}
             disabled={isSaving}
-            className="project-title-button cancel"
+            className="bg-white text-black border border-black rounded-full px-6 py-2 font-medium transition-colors duration-150 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -81,7 +80,10 @@ export function ProjectTitle() {
   }
 
   return (
-    <h1 onClick={() => setIsEditing(true)} className="project-title">
+    <h1
+      onClick={() => setIsEditing(true)}
+      className="text-4xl font-bold tracking-tight cursor-pointer px-2 py-1 rounded-lg hover:bg-neutral-100 transition-colors duration-150"
+    >
       {project.title}
     </h1>
   );
