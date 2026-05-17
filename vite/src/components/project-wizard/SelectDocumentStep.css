@@ -1,0 +1,110 @@
+.content-editor-section {
+  margin-top: 24px;
+}
+
+.editor-label {
+  display: block;
+  font-family: figmaSans, figmaSans Fallback, SF Pro Display, system-ui,
+    helvetica;
+  font-size: 18px;
+  font-weight: 320;
+  line-height: 1.45;
+  letter-spacing: -0.26px;
+  color: #000000;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.content-textarea {
+  width: 100%;
+  min-height: 240px;
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #000000;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.content-textarea:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Button Styling */
+.btn {
+  font-family: figmaSans, figmaSans Fallback, SF Pro Display, system-ui,
+    helvetica;
+  font-size: 20px;
+  font-weight: 480;
+  line-height: 1.4;
+  letter-spacing: -0.1px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.btn-primary:not(:disabled):hover {
+  background-color: #1a1a1a;
+}
+
+.btn-primary:not(:disabled):active {
+  background-color: #000000;
+  transform: scale(0.98);
+}
+
+.unsaved-indicator {
+  font-family: figmaSans, figmaSans Fallback, SF Pro Display, system-ui,
+    helvetica;
+  font-size: 16px;
+  font-weight: 330;
+  line-height: 1.45;
+  letter-spacing: -0.14px;
+  color: #666666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content-textarea {
+    min-height: 180px;
+    font-size: 16px;
+  }
+
+  .editor-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .unsaved-indicator {
+    text-align: center;
+  }
+}

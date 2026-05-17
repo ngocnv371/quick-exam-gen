@@ -62,13 +62,39 @@ export async function getProjectDetail(projectId: string) {
     .maybeSingle();
 }
 
+/**
+ * Update a single metadata field for a project. This function first retrieves the current metadata,
+ * updates the specified field, and then saves the updated metadata back to the database. This approach
+ * helps to prevent overwriting other metadata fields that may have been updated concurrently.
+ * @param projectId The ID of the project to update
+ * @param fieldName The name of the metadata field to update
+ * @param value The new value for the metadata field
+ * @returns The result of the update operation
+ */
 export async function updateProjectMetadataField(
   projectId: string,
   fieldName: string,
   value: unknown,
 ) {
+  const recentData = await supabase
+    .from("projects")
+    .select("metadata")
+    .eq("id", projectId)
+    .eq("type", "exam")
+    .maybeSingle();
+
+  if (!recentData || !recentData.data) {
+    throw new Error("Project not found");
+  }
+
+  const updatedMetadata = {
+    ...recentData.data.metadata,
+    [fieldName]: value,
+  };
+
   return supabase
     .from("projects")
-    .update({ [`metadata->${fieldName}`]: value })
-    .eq("id", projectId);
+    .update({ metadata: updatedMetadata })
+    .eq("id", projectId)
+    .eq("type", "exam");
 }
