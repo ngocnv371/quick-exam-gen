@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useContext, useEffect, useState } from 'react';
 import { getUserCoinBalance, type CoinsBalance } from '../lib/supabase';
 import { Zap, Loader } from 'lucide-react';
+import { UserContext } from '../context/UserContext';
 
 export function BillingBalance() {
-  const { user } = useAuth();
+  const user = useContext(UserContext);  
   const [balance, setBalance] = useState<CoinsBalance | null>(null);
   const [loading, setLoading] = useState(true);
 

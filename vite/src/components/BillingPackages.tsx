@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useContext, useEffect, useState } from 'react';
 import {
   getCoinPackages,
   createCoinOrder,
   type CoinPackage,
 } from '../lib/supabase';
 import { Zap, Loader } from 'lucide-react';
+import { UserContext } from '../context/UserContext';
 
 interface BillingPackagesProps {
   onPurchaseSuccess?: () => void;
 }
 
 export function BillingPackages({ onPurchaseSuccess }: BillingPackagesProps) {
-  const { user } = useAuth();
+  const user = useContext(UserContext);
   const [packages, setPackages] = useState<CoinPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

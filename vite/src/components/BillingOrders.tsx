@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useContext, useEffect, useState } from 'react';
 import { getUserCoinOrders, type CoinOrder } from '../lib/supabase';
 import { Loader } from 'lucide-react';
+import { UserContext } from '../context/UserContext';
 
 interface BillingOrdersProps {
   refreshTrigger?: number;
 }
 
 export function BillingOrders({ refreshTrigger }: BillingOrdersProps) {
-  const { user } = useAuth();
+  const user = useContext(UserContext);
   const [orders, setOrders] = useState<CoinOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
