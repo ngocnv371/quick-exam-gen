@@ -118,8 +118,8 @@ export default function Projects() {
   const formatDate = (value: string) => dateFormatter.format(new Date(value))
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-md sm:px-lg pb-section">
-      <section className="relative overflow-hidden py-xxl sm:py-section px-lg sm:px-xxl bg-block-coral rounded-lg">
+    <main className="w-full max-w-7xl mt-2 mx-auto px-md sm:px-lg pb-section">
+      <section className="relative overflow-hidden py-xxl sm:py-6 px-lg sm:px-xxl bg-block-coral rounded-lg">
         <div className="absolute -top-20 -right-16 w-64 h-64 rounded-full bg-canvas/45" aria-hidden="true" />
         <div className="absolute -bottom-24 left-10 w-72 h-72 rounded-[36px] bg-block-cream/70 rotate-6" aria-hidden="true" />
 

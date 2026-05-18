@@ -23,7 +23,7 @@ export function AnalysisCard({ analysis }: { analysis: ExamAnalysis }) {
           {analysis.questions.map((question) => (
             <div key={question.index} className="p-md border border-hairline rounded-md bg-surface-soft space-y-md">
               <div className="flex items-center gap-md">
-                <span className="inline-block w-8 h-8 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold text-sm">Q{question.index}</span>
+                <span className="inline-flex w-8 h-8 bg-primary text-on-primary rounded-full items-center justify-center font-bold text-sm leading-none">Q{question.index}</span>
                 <span className="inline-block px-sm py-xs bg-ink text-on-primary rounded-sm text-body-sm font-medium">
                   {question.questionType}
                 </span>

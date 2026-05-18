@@ -81,7 +81,7 @@ export default function ProjectDetail() {
   return (
     <ProjectContext.Provider value={state}>
       <ProjectDispatchContext.Provider value={dispatch}>
-        <main className="w-full max-w-7xl mx-auto">
+        <main className="w-full max-w-7xl mt-2 mx-auto">
           <section className="flex flex-col items-center justify-center gap-lg py-6 px-lg bg-canvas">
             {state.loading ? (
               <h1 className="text-display-lg font-light text-ink">

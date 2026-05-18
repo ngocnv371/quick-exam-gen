@@ -27,7 +27,7 @@ export function ExamCard({ exam }: { exam: ExamVariant }) {
                         : 'bg-surface-soft border-hairline'
                     }`}
                   >
-                    <span className={`inline-block w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs ${
+                    <span className={`inline-flex w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs ${
                       choice.isCorrect
                         ? 'bg-semantic-success text-on-primary'
                         : 'bg-hairline text-ink/40'
