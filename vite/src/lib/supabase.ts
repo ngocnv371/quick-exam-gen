@@ -106,3 +106,90 @@ export async function updateProjectMetadataField(
     .eq("id", projectId)
     .eq("type", "exam");
 }
+
+// ============================================================
+// Billing functions
+// ============================================================
+
+export interface CoinPackage {
+  id: string;
+  label: string;
+  coins: number;
+  price_cents: number;
+  currency: string;
+  active: boolean;
+  sort_order: number;
+}
+
+export interface CoinOrder {
+  id: string;
+  user_id: string;
+  package_id: string;
+  status: "pending" | "paid" | "fulfilled" | "failed" | "cancelled";
+  coins: number;
+  price_cents: number;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+  paid_at: string | null;
+  fulfilled_at: string | null;
+}
+
+export interface CoinsBalance {
+  user_id: string;
+  balance: number;
+  updated_at: string;
+}
+
+export async function getCoinPackages() {
+  return supabase
+    .from("coin_packages")
+    .select("*")
+    .order("sort_order", { ascending: true });
+}
+
+export async function getUserCoinBalance(userId: string) {
+  return supabase
+    .from("coins_balance")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+}
+
+export async function getUserCoinOrders(userId: string) {
+  return supabase
+    .from("coin_orders")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+}
+
+export async function createCoinOrder(packageId: string) {
+  const { data: pkg, error: pkgError } = await supabase
+    .from("coin_packages")
+    .select("coins, price_cents, currency")
+    .eq("id", packageId)
+    .single();
+
+  if (pkgError) {
+    throw new Error(`Failed to fetch package: ${pkgError.message}`);
+  }
+
+  const { data } = await supabase.auth.getSession();
+  if (!data?.session?.user?.id) {
+    throw new Error("User not authenticated");
+  }
+
+  return supabase
+    .from("coin_orders")
+    .insert({
+      user_id: data.session.user.id,
+      package_id: packageId,
+      coins: pkg.coins,
+      price_cents: pkg.price_cents,
+      currency: pkg.currency,
+      status: "pending",
+    })
+    .select("*")
+    .single();
+}
