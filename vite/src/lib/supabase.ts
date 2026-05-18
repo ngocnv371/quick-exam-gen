@@ -165,31 +165,5 @@ export async function getUserCoinOrders(userId: string) {
 }
 
 export async function createCoinOrder(packageId: string) {
-  const { data: pkg, error: pkgError } = await supabase
-    .from("coin_packages")
-    .select("coins, price_cents, currency")
-    .eq("id", packageId)
-    .single();
-
-  if (pkgError) {
-    throw new Error(`Failed to fetch package: ${pkgError.message}`);
-  }
-
-  const { data } = await supabase.auth.getSession();
-  if (!data?.session?.user?.id) {
-    throw new Error("User not authenticated");
-  }
-
-  return supabase
-    .from("coin_orders")
-    .insert({
-      user_id: data.session.user.id,
-      package_id: packageId,
-      coins: pkg.coins,
-      price_cents: pkg.price_cents,
-      currency: pkg.currency,
-      status: "pending",
-    })
-    .select("*")
-    .single();
+  return supabase.rpc("billing_place_order", { p_package_id: packageId });
 }

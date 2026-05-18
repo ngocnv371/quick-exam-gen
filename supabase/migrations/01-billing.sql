@@ -112,8 +112,7 @@ create policy "coin_packages: public read"
 insert into public.coin_packages (id, label, coins, price_cents, sort_order) values
   ('starter',   'Starter',   10,  199,  1),
   ('standard',  'Standard',  50,  799,  2),
-  ('pro',       'Pro',       120, 1699, 3),
-  ('unlimited', 'Unlimited', 300, 3499, 4);
+  ('pro',       'Pro',       120, 1699, 3);
 
 -- ============================================================
 -- 5. coin_orders  (purchase lifecycle tracking)
@@ -376,3 +375,39 @@ end;
 $$;
 
 revoke execute on function public.billing_fail_order(uuid, text) from public, anon, authenticated;
+
+-- 8e. billing_place_order
+--     Create a new pending coin order for the calling (authenticated) user,
+--     copying snapshot data (coins, price_cents, currency) from the package.
+--     Returns the new order id.
+create or replace function public.billing_place_order(
+  p_package_id text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_package  record;
+  v_order_id uuid;
+begin
+  select coins, price_cents, currency
+    into v_package
+    from public.coin_packages
+   where id = p_package_id
+     and active = true;
+
+  if not found then
+    raise exception 'Package not found or inactive: %', p_package_id;
+  end if;
+
+  insert into public.coin_orders (user_id, package_id, coins, price_cents, currency, status)
+  values (auth.uid(), p_package_id, v_package.coins, v_package.price_cents, v_package.currency, 'pending')
+  returning id into v_order_id;
+
+  return v_order_id;
+end;
+$$;
+
+grant execute on function public.billing_place_order(text) to authenticated;
