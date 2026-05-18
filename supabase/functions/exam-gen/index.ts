@@ -25,6 +25,9 @@ const QuestionSchema = z.object({
   index: z.number(),
   text: z.string(),
   explanation: z.string(),
+  answer: z.string().describe(
+    "For multiple-choice: the letter of the correct choice (A, B, C, or D). For open-ended: a concise model answer.",
+  ),
   type: z.enum(["multiple-choice", "open-ended"]),
   choices: z.array(ChoiceSchema).min(2).max(4).optional(),
 });
@@ -75,6 +78,7 @@ For each variant:
 - Preserve question types (multiple-choice or open-ended)
 - For multiple-choice questions, provide 4 answer choices labeled A, B, C, D
 - Ensure correct answers remain correct in the new context
+- For the "answer" field: use the letter (A, B, C, or D) for multiple-choice questions, or provide a concise model answer for open-ended questions
 
 Source Exam Content:
 ${exam}

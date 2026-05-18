@@ -1,5 +1,7 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProjectContext, ProjectDispatchContext, type ExamAnalysis, type ExamVariant } from "../../context/ProjectContext";
+import { Zap, RefreshCcw} from "lucide-react";
+import { updateProjectMetadataField } from "../../lib/supabase";
 import { ExamVariantsCard } from "./ExamVariantsCard";
 
 async function callGenerateApi(analysis: ExamAnalysis, quantity: number) {
@@ -36,6 +38,7 @@ export function ResultStep() {
   const dispatch = useContext(ProjectDispatchContext)!;
   const analysis = project?.metadata?.analysis as ExamAnalysis;
   const variantsResult = project?.metadata?.variants as ExamVariant[];
+  const [isSavingVariant, setIsSavingVariant] = useState(false);
 
   async function onGenerateVariants() {
     if (!analysis) {
@@ -54,6 +57,28 @@ export function ResultStep() {
     }
   }
 
+  async function onSaveVariant(index: number, variant: ExamVariant) {
+    if (!project) return;
+
+    setIsSavingVariant(true);
+    try {
+      const updatedVariants = (variantsResult ?? []).map((v, i) =>
+        i === index ? variant : v,
+      );
+      const { error } = await updateProjectMetadataField(
+        project.id,
+        "variants",
+        updatedVariants,
+      );
+      if (error) throw error;
+      dispatch({ type: "UPDATE_VARIANT", payload: { index, variant } });
+    } catch (error) {
+      dispatch({ type: "SET_ERROR", payload: (error as Error).message });
+    } finally {
+      setIsSavingVariant(false);
+    }
+  }
+
   return (
     <div className="space-y-lg">
       <div>
@@ -67,12 +92,17 @@ export function ResultStep() {
           disabled={isGenerating || !analysis}
           onClick={onGenerateVariants}
         >
-          {isGenerating ? "Generating variants..." : "Generate variants"}
+          {isGenerating ? <RefreshCcw className="inline mr-2 animate-spin" /> : <Zap className="inline mr-2" />}
+          {isGenerating ? "Generating..." : "Generate"}
         </button>
       </div>
 
       {variantsResult?.length ? (
-        <ExamVariantsCard variants={variantsResult} />
+        <ExamVariantsCard
+          variants={variantsResult}
+          isSaving={isSavingVariant}
+          onSaveVariant={onSaveVariant}
+        />
       ) : (
         <p className="text-body-sm text-ink/60">No generated variants yet.</p>
       )}

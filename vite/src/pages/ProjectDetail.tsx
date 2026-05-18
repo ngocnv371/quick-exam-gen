@@ -20,8 +20,8 @@ type StepConfig = {
 };
 
 const WIZARD_STEPS: StepConfig[] = [
-  { id: "select", label: "Select document" },
-  { id: "analyze", label: "Analyze text" },
+  { id: "select", label: "Upload" },
+  { id: "analyze", label: "Analyze" },
   { id: "result", label: "Generate" },
 ];
 
@@ -76,14 +76,13 @@ export default function ProjectDetail() {
   const furthestStepIndex = WIZARD_STEPS.findIndex(
     (step) => step.id === furthestStep,
   );
-  const progressPercent = (furthestStepIndex / (WIZARD_STEPS.length - 1)) * 100;
   const persistentWizardError = state?.error;
 
   return (
     <ProjectContext.Provider value={state}>
       <ProjectDispatchContext.Provider value={dispatch}>
         <main className="w-full max-w-7xl mx-auto">
-          <section className="flex flex-col items-center justify-center gap-lg py-section px-lg bg-canvas">
+          <section className="flex flex-col items-center justify-center gap-lg py-6 px-lg bg-canvas">
             {state.loading ? (
               <h1 className="text-display-lg font-light text-ink">
                 Loading project...
@@ -99,7 +98,7 @@ export default function ProjectDetail() {
             ) : null}
           </section>
 
-          <section className="py-section px-lg bg-block-cream rounded-lg mx-lg">
+          <section className="py-6 px-lg bg-block-cream rounded-lg mx-lg">
             {state.error ? (
               <p
                 className="py-md px-lg bg-red-100 text-red-700 rounded-md mb-lg"
@@ -115,7 +114,7 @@ export default function ProjectDetail() {
                 aria-label="Exam generation wizard"
               >
                 <div
-                  className="flex gap-md flex-wrap"
+                  className="flex w-full flex-wrap gap-sm rounded-pill border border-hairline bg-canvas p-xs"
                   role="tablist"
                   aria-label="Wizard steps"
                 >
@@ -128,34 +127,31 @@ export default function ProjectDetail() {
                         key={step.id}
                         type="button"
                         role="tab"
+                        id={`wizard-tab-${step.id}`}
+                        aria-controls={`wizard-panel-${step.id}`}
                         aria-selected={isActive}
-                        className={`flex items-center gap-xs px-lg py-sm rounded-md font-medium transition-colors ${
+                        tabIndex={isActive ? 0 : -1}
+                        className={`relative flex min-w-[180px] flex-1 flex-col items-start gap-1 rounded-pill px-lg py-xs text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
                           isActive
                             ? "bg-primary text-on-primary"
                             : isCompleted
-                              ? "bg-surface-soft text-ink hover:bg-ink/10"
-                              : "bg-surface-soft text-ink/40 cursor-not-allowed"
+                              ? "bg-canvas text-ink hover:bg-surface-soft"
+                              : "bg-canvas text-ink opacity-45 cursor-not-allowed"
                         }`}
                         onClick={() => {
                           dispatch({ type: "SET_STEP", payload: step.id });
                         }}
                         disabled={!isCompleted && !isActive}
                       >
-                        <span className="font-bold text-sm">{index + 1}</span>
-                        <span className="text-body-sm">{step.label}</span>
+                        <span className="text-caption uppercase tracking-[0.6px]">
+                          {`Step ${index + 1}`}
+                        </span>
+                        <span className="text-button font-medium truncate">
+                          {step.label}
+                        </span>
                       </button>
                     );
                   })}
-                </div>
-
-                <div
-                  className="w-full h-1 bg-hairline rounded-full overflow-hidden"
-                  aria-hidden
-                >
-                  <div
-                    className="h-full bg-primary transition-all duration-300"
-                    style={{ width: `${progressPercent}%` }}
-                  />
                 </div>
 
                 {persistentWizardError ? (
@@ -167,13 +163,28 @@ export default function ProjectDetail() {
                   </p>
                 ) : null}
 
-                <div hidden={state.step !== "select"}>
+                <div
+                  id="wizard-panel-select"
+                  role="tabpanel"
+                  aria-labelledby="wizard-tab-select"
+                  hidden={state.step !== "select"}
+                >
                   <SelectDocumentStep />
                 </div>
-                <div hidden={state.step !== "analyze"}>
+                <div
+                  id="wizard-panel-analyze"
+                  role="tabpanel"
+                  aria-labelledby="wizard-tab-analyze"
+                  hidden={state.step !== "analyze"}
+                >
                   <AnalyzeTextStep />
                 </div>
-                <div hidden={state.step !== "result"}>
+                <div
+                  id="wizard-panel-result"
+                  role="tabpanel"
+                  aria-labelledby="wizard-tab-result"
+                  hidden={state.step !== "result"}
+                >
                   <ResultStep />
                 </div>
               </section>

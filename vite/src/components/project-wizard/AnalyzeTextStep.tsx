@@ -110,7 +110,7 @@ export function AnalyzeTextStep() {
         <button
           type="button"
           className="px-lg py-sm bg-primary text-on-primary rounded-pill text-button font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
-          disabled={isAnalyzing}
+          disabled={isAnalyzing || isEditing}
           onClick={onAnalyze}
         >
           {isAnalyzing ? <RefreshCcw className="inline mr-2 animate-spin" /> : <Zap className="inline mr-2" />}

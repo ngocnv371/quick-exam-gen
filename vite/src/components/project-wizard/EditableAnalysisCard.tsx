@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { RefreshCcw, Save } from "lucide-react";
 import type { ExamAnalysis } from "../../context/ProjectContext";
 
 type EditableAnalysisCardProps = {
@@ -22,6 +23,7 @@ export function EditableAnalysisCard({
   const [draft, setDraft] = useState<ExamAnalysis>(analysis);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraft(analysis);
   }, [analysis]);
 
@@ -64,11 +66,18 @@ export function EditableAnalysisCard({
     }));
   };
 
+  if (!analysis) {
+    return null;
+  }
+
   return (
     <div className="space-y-lg p-lg border border-hairline rounded-lg bg-canvas">
       <div className="space-y-md pb-lg border-b border-hairline">
         <div>
-          <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor="analysis-title">
+          <label
+            className="text-body-sm font-semibold text-ink block mb-xs"
+            htmlFor="analysis-title"
+          >
             Exam title
           </label>
           <input
@@ -83,7 +92,10 @@ export function EditableAnalysisCard({
         </div>
 
         <div>
-          <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor="analysis-subject">
+          <label
+            className="text-body-sm font-semibold text-ink block mb-xs"
+            htmlFor="analysis-subject"
+          >
             Subject
           </label>
           <input
@@ -98,7 +110,10 @@ export function EditableAnalysisCard({
         </div>
 
         <div>
-          <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor="analysis-intent">
+          <label
+            className="text-body-sm font-semibold text-ink block mb-xs"
+            htmlFor="analysis-intent"
+          >
             Overall intent
           </label>
           <textarea
@@ -106,14 +121,19 @@ export function EditableAnalysisCard({
             className="w-full min-h-24 px-md py-sm border border-hairline rounded-md bg-surface-soft text-ink"
             value={draft.overallIntent}
             onChange={(event) => {
-              setDraft((prev) => ({ ...prev, overallIntent: event.target.value }));
+              setDraft((prev) => ({
+                ...prev,
+                overallIntent: event.target.value,
+              }));
             }}
           />
         </div>
       </div>
 
       <div className="space-y-md">
-        <h4 className="text-card-title font-bold text-ink">Questions ({draft.questions.length})</h4>
+        <h4 className="text-card-title font-bold text-ink">
+          Questions ({draft.questions.length})
+        </h4>
         <div className="space-y-md">
           {draft.questions.map((question) => (
             <div
@@ -143,7 +163,10 @@ export function EditableAnalysisCard({
               </div>
 
               <div>
-                <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor={`q-${question.index}-text`}>
+                <label
+                  className="text-body-sm font-semibold text-ink block mb-xs"
+                  htmlFor={`q-${question.index}-text`}
+                >
                   Question text
                 </label>
                 <textarea
@@ -151,13 +174,20 @@ export function EditableAnalysisCard({
                   className="w-full min-h-20 px-md py-sm border border-hairline rounded-md bg-canvas text-ink"
                   value={question.text}
                   onChange={(event) => {
-                    onQuestionChange(question.index, "text", event.target.value);
+                    onQuestionChange(
+                      question.index,
+                      "text",
+                      event.target.value,
+                    );
                   }}
                 />
               </div>
 
               <div>
-                <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor={`q-${question.index}-purpose`}>
+                <label
+                  className="text-body-sm font-semibold text-ink block mb-xs"
+                  htmlFor={`q-${question.index}-purpose`}
+                >
                   Intended purpose
                 </label>
                 <textarea
@@ -175,7 +205,10 @@ export function EditableAnalysisCard({
               </div>
 
               <div>
-                <label className="text-body-sm font-semibold text-ink block mb-xs" htmlFor={`q-${question.index}-skills`}>
+                <label
+                  className="text-body-sm font-semibold text-ink block mb-xs"
+                  htmlFor={`q-${question.index}-skills`}
+                >
                   Tested skills (comma separated)
                 </label>
                 <input
@@ -206,6 +239,11 @@ export function EditableAnalysisCard({
             void onSave(draft);
           }}
         >
+          {isSaving ? (
+            <RefreshCcw className="inline mr-2 animate-spin" />
+          ) : (
+            <Save className="inline mr-2" />
+          )}
           {isSaving ? "Saving analysis..." : "Save analysis"}
         </button>
 
@@ -217,6 +255,7 @@ export function EditableAnalysisCard({
             setDraft(analysis);
           }}
         >
+          <RefreshCcw className="inline mr-2" />
           Reset changes
         </button>
       </div>

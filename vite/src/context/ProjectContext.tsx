@@ -21,6 +21,7 @@ export type ExamVariant = {
     text: string;
     explanation: string;
     questionType: "multiple-choice" | "open-ended";
+    answer: string;
     choices?: {
       text: string;
       isCorrect: boolean;
@@ -118,6 +119,19 @@ export function projectReducer(
           project: { ...state.project, metadata },
           error: null,
           step: "result",
+        };
+      }
+      return state;
+    case "UPDATE_VARIANT":
+      if (state.project) {
+        const { index, variant } = action.payload as { index: number; variant: ExamVariant };
+        const variants = (state.project.metadata.variants as ExamVariant[]).map(
+          (v, i) => (i === index ? variant : v),
+        );
+        return {
+          ...state,
+          project: { ...state.project, metadata: { ...state.project.metadata, variants } },
+          error: null,
         };
       }
       return state;

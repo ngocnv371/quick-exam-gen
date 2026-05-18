@@ -46,6 +46,13 @@ export function ExamCard({ exam }: { exam: ExamVariant }) {
               <div className="text-body-sm font-semibold text-ink mb-xs">Explanation</div>
               <p className="text-body-sm text-ink/70">{question.explanation}</p>
             </div>
+
+            {question.answer && (
+              <div className="p-md rounded-md bg-green-50 border border-green-200">
+                <div className="text-body-sm font-semibold text-green-700 mb-xs">Answer</div>
+                <p className="text-body-sm text-green-800">{question.answer}</p>
+              </div>
+            )}
           </div>
         ))}
       </div>
